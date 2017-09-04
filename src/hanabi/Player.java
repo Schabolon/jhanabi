@@ -10,4 +10,23 @@ public class Player {
 		this.playerName = "Player " + Integer.toString(i);
 	}
 
+	public List<Card> getCardList() {
+		return cardList;
+	}
+
+	public void setCardList(List<Card> cardList) {
+		this.cardList = cardList;
+	}
+
+	public void handoutNewCard(Card card) {
+		cardList.add(card);
+	}
+	
+	public void removeCard(int position) {
+		cardList.remove(position);
+	}
+	
+	public String getPlayerName() {
+		return playerName;
+	}
 }
