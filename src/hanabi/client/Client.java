@@ -61,6 +61,7 @@ public class Client implements IClient {
 			break;
 		case QUIT:
 			System.out.println("Stopping the game");
+			this.disconnect();
 			break;
 		case STATUS:
 			System.out.println("Updating game information");
