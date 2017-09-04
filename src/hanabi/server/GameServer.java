@@ -1,6 +1,7 @@
 package hanabi.server;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ public class GameServer implements IServer {
 	private Map<Player, Boolean> playersReady;
 
 	public GameServer() {
+		players = new ArrayList<>();
 		playersByClientThread = new HashMap<>();
 		playersReady = new HashMap<>();
 	}
