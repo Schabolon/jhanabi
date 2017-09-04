@@ -43,13 +43,6 @@ public class Message implements IMessage, Serializable {
 		this.colorType = colorType;
 	}
 
-	public Message(MessageType messageType, Player player, Card card, PlayerActions playerActions) {
-		this.messageType = messageType;
-		this.player = player;
-		this.card = card;
-		this.playerActions = playerActions;
-	}
-
 	public Message(MessageType messageType, Player player, PlayerActions playerActions, ColorType colorType) {
 		this.messageType = messageType;
 		this.player = player;

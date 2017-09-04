@@ -41,11 +41,11 @@ public class GameStats {
 
 	public void handOutCardsAtGamestart(List<Player> playerList) {
 		for (int i = 0; i < playerList.size(); i++) {
-			handoutRandomCardsFromCarddeckToPlayer(5, playerList.get(i));
+			handoutCardsFromCarddeckToPlayer(5, playerList.get(i));
 		}
 	}
 
-	private void handoutRandomCardsFromCarddeckToPlayer(int cardCount, Player player) {
+	private void handoutCardsFromCarddeckToPlayer(int cardCount, Player player) {
 		for (int i = 0; i < cardCount; i++) {
 			player.handoutNewCard(drawCardFromDeck());
 		}
@@ -55,7 +55,7 @@ public class GameStats {
 		return carddeck.get(carddeck.size() - 1);
 	}
 
-	public void shuffle() {
+	private void shuffle() {
 		Collections.shuffle(carddeck);
 	}
 

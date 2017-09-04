@@ -127,7 +127,7 @@ public class Client implements IClient {
 	private void giveValueHint() {
 		System.out.println("Please choose a number (1-5)");
 		int numberValue = Integer.parseInt(getUserInput());
-		System.out.println("Please choose the player (1-4) you want to give the hint");
+		System.out.println("Please choose the player (1-5) you want to give the hint");
 		int playerNumber = Integer.parseInt(getUserInput());
 		Message msg = new Message(MessageType.TURNACTION, new Player(playerNumber), PlayerActions.GIVE_NUMBER_HINT,
 				numberValue);

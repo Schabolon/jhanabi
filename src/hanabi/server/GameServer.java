@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import hanabi.GameStats;
 import hanabi.IMessage;
 import hanabi.Message;
 import hanabi.Message.MessageType;
@@ -15,6 +16,7 @@ public class GameServer implements IServer {
 	private List<Player> players;
 	private Map<Player, ClientThread> playersByClientThread;
 	private Map<Player, Boolean> playersReady;
+	private GameStats gameStats;
 
 	public GameServer() {
 		players = new ArrayList<>();
@@ -125,6 +127,8 @@ public class GameServer implements IServer {
 		}
 		if (allPlayersReady()) {
 			sendAll(new Message(MessageType.START));
+			gameStats = new GameStats();
+			gameStats.handOutCardsAtGamestart(players);
 		}
 	}
 

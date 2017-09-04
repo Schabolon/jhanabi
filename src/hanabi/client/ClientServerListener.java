@@ -22,7 +22,7 @@ public class ClientServerListener extends Thread {
 
 	@Override
 	public void run() {
-		System.out.println("Started listening ...");
+		System.err.println("Started listening ...");
 		while (listenToServer && !client.getSocket().isClosed()) {
 			Object object = null;
 			try {
