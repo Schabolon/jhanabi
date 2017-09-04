@@ -35,7 +35,7 @@ public class Client implements IClient {
 		client.connect();
 		client.listenToServer();
 		client.sendMessage(new Message(MessageType.START));
-		client.sendMessage(new Message(MessageType.QUIT));
+//		client.sendMessage(new Message(MessageType.QUIT));
 	}
 
 	@Override

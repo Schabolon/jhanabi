@@ -30,12 +30,9 @@ public class ClientThread extends Thread {
 			outputStream = new ObjectOutputStream(socket.getOutputStream());
 			inputStream = new ObjectInputStream(socket.getInputStream());
 			game.addPlayer(player, this);
-			while (true) {
+			while (!socketIsClosed) {
 				input = (IMessage) inputStream.readObject();
 				game.readMessage(this, input);
-				if (socketIsClosed) {
-					break;
-				}
 			}
 			socket.close();
 		} catch (IOException e) {

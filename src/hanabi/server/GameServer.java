@@ -129,6 +129,8 @@ public class GameServer implements IServer {
 			sendAll(new Message(MessageType.START));
 			gameStats = new GameStats();
 			gameStats.handOutCardsAtGamestart(players);
+			Message turnStarMessage = new Message(MessageType.TURNSTART);
+			sendMessage(playersByClientThread.get(players.get(0)), turnStarMessage);
 		}
 	}
 
