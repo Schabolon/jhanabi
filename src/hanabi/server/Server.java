@@ -3,9 +3,14 @@ package hanabi.server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import hanabi.IMessage;
+import hanabi.Player;
 
 public class Server {
 	static final int PORT = 1024;
@@ -16,7 +21,7 @@ public class Server {
 		Socket socket = null;
 		ServerSocket serverSocket = null;
 		boolean listeningForClients = true;
-		
+		GameServer game = new GameServer();
 		try {
 			serverSocket = new ServerSocket(PORT);
 		} catch (IOException e) {
@@ -33,9 +38,9 @@ public class Server {
 					System.out.println("Connection failed");
 				}
 				System.out.println("Connection established");
-				ServerThread serverThread = new ServerThread(socket, n++);
+				ServerThread serverThread = new ServerThread(game, socket, n++);
 				serverThread.start();
-			
+				
 			
 		}
 		
@@ -44,37 +49,38 @@ public class Server {
 
 class ServerThread extends Thread{
 	Socket socket = null;
-	String input = null;
-
+	IMessage input = null;
+	GameServer game;
+	Player player;
 	
 	
 	
-	public ServerThread(Socket socket, int n) {
+	public ServerThread(GameServer game, Socket socket, int n) {
 		super("serverThread " + n);
+		this.game = game;
 		this.socket = socket;
+		player = new Player(n+1);
 	}
 	
 	public void run() {
 		try {
-			BufferedReader inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			PrintWriter outputStream = new PrintWriter(socket.getOutputStream(), true);
 			
+			ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
+			game.addPlayer(player, socket);
 			while(true) {
 				
-					input = inputStream.readLine();
-					if(input.equalsIgnoreCase("QUIT")) {
-						socket.close();
-					}
-					else {
-						// do something with input
-						// give something to outputStream 
-					}
+					input = (IMessage)inputStream.readObject();
+					game.readMessage(input);
+						
+					
 				}
 			
 		} catch (IOException e) {
-			
 			e.printStackTrace();
 		}
+		catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} 
 		
 	}
 	

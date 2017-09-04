@@ -42,8 +42,8 @@ public class Message implements IMessage {
 	}
 
 	@Override
-	public String getMessageType() {
-		return messageType.toString();
+	public MessageType getMessageType() {
+		return messageType;
 	}
 
 }
