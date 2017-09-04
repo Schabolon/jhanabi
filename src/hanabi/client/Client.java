@@ -8,9 +8,13 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import hanabi.Card;
 import hanabi.IMessage;
 import hanabi.Message;
+import hanabi.Message.ColorType;
 import hanabi.Message.MessageType;
+import hanabi.Message.PlayerActions;
+import hanabi.Player;
 
 public class Client implements IClient {
 
@@ -38,20 +42,16 @@ public class Client implements IClient {
 	public void sendMessage(IMessage msg) {
 		try {
 			objectOutputStream.writeObject(msg);
-		} catch (IOException e) {
-			System.out.println("Couldn't write Message to ObjectOutputStream");
-			e.printStackTrace();
-		}
-		try {
 			objectOutputStream.flush();
 		} catch (IOException e) {
-			System.out.println("Couldn't flush ObjectOutputStream");
+			System.out.println("Couldn't write Message to ObjectOutputStream");
 			e.printStackTrace();
 		}
 	}
 
 	@Override
 	public void readMessage(IMessage msg) {
+		System.out.println("Processing Message");
 		MessageType messageType = msg.getMessageType();
 		switch (messageType) {
 		case START:
@@ -66,6 +66,7 @@ public class Client implements IClient {
 			System.out.println("Updating game information");
 			break;
 		case TURNACTION:
+			System.out.println("Wrong MessageType");
 			break;
 		case TURNEND:
 			System.out.println("It's the next players turn");
@@ -77,7 +78,6 @@ public class Client implements IClient {
 			System.out.println("Unknown Message Type");
 			break;
 		}
-		System.out.println("Message received");
 	}
 
 	private void startTurn() {
@@ -114,36 +114,46 @@ public class Client implements IClient {
 	private void processUserHintKind() {
 		String userInput = getUserInput();
 		switch (userInput.toLowerCase()) {
-		case "a": giveValueHint();
+		case "a":
+			giveValueHint();
 			break;
-		case "b": giveColorHint();
+		case "b":
+			giveColorHint();
 			break;
 		}
 	}
 
 	private void giveValueHint() {
-		System.out.println("Please choose which a number value (1-5)");
+		System.out.println("Please choose a number (1-5)");
 		int numberValue = Integer.parseInt(getUserInput());
 		System.out.println("Please choose the player (1-4) you want to give the hint");
 		int playerNumber = Integer.parseInt(getUserInput());
+		Message msg = new Message(MessageType.TURNACTION, new Player(playerNumber), PlayerActions.GIVE_NUMBER_HINT, numberValue);
+		sendMessage(msg);
 	}
-	
+
 	private void giveColorHint() {
 		System.out.println("Please choose a color (red, green, blue, yellow)");
 		String color = getUserInput();
 		System.out.println("Please choose the player (1-4) you want to give the hint");
+		int playerNumber = Integer.parseInt(getUserInput());
+		Message msg = new Message(MessageType.TURNACTION, new Player(playerNumber), PlayerActions.GIVE_COLOR_HINT,
+				ColorType.getColorFromString(color));
+		sendMessage(msg);
 	}
-	
+
 	private void discardCard() {
 		System.out.println("Please choose the position (1-5) of the card you want to discard:");
 		int cardPosition = getCardPositionUserInput();
-		// TODO send data to server
+		Message msg = new Message(MessageType.TURNACTION, new Card(cardPosition), PlayerActions.DISCARD);
+		sendMessage(msg);
 	}
 
 	private void playCard() {
 		System.out.println("Please choose the position (1-5) of the card you want to play:");
 		int cardPosition = getCardPositionUserInput();
-		// TODO send data to server
+		Message msg = new Message(MessageType.TURNACTION, new Card(cardPosition), PlayerActions.PLAY_CARD);
+		sendMessage(msg);
 	}
 
 	private int getCardPositionUserInput() {
