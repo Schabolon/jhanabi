@@ -1,10 +1,12 @@
 package hanabi;
 
+import hanabi.Message.MessageType;
+
 public interface IMessage {
 
 	public Player getPlayer();
 	
-	public String getMessageType();
+	public MessageType getMessageType();
 	
 	public Card getCard();
 	
