@@ -29,6 +29,12 @@ public class Client implements IClient {
 		this.port = port;
 	}
 
+	public static void main(String[] args) {
+		Client client = new Client("localhost", 1024);
+		client.connect();
+		client.listenToServer();
+	}
+
 	@Override
 	public void sendMessage(IMessage msg) {
 		try {
@@ -109,7 +115,7 @@ public class Client implements IClient {
 	private void discardCard() {
 		System.out.println("BBB");
 	}
-	
+
 	private void playCard() {
 		System.out.println("CCC");
 	}
