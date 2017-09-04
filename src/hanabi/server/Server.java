@@ -39,8 +39,8 @@ public class Server {
 					System.out.println("Connection failed");
 				}
 				System.out.println("Connection established");
-				ServerThread serverThread = new ServerThread(game, socket, n++);
-				serverThread.start();
+				ClientThread clientThread = new ClientThread(game, socket, n++);
+				clientThread.start();
 				
 			
 		}
@@ -48,16 +48,18 @@ public class Server {
 }
 }
 
-class ServerThread extends Thread{
+class ClientThread extends Thread{
 	Socket socket = null;
+	ObjectOutputStream outputStream = null;
+	ObjectInputStream inputStream = null;
 	IMessage input = null;
 	GameServer game;
 	Player player;
 	
 	
 	
-	public ServerThread(GameServer game, Socket socket, int n) {
-		super("serverThread " + n);
+	public ClientThread(GameServer game, Socket socket, int n) {
+		super("ClientThread " + n);
 		this.game = game;
 		this.socket = socket;
 		player = new Player(n+1);
@@ -65,9 +67,9 @@ class ServerThread extends Thread{
 	
 	public void run() {
 		try {
-			
-			ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
-			game.addPlayer(player, socket);
+			outputStream = new ObjectOutputStream(socket.getOutputStream());
+			inputStream = new ObjectInputStream(socket.getInputStream());
+			game.addPlayer(player, this);
 			while(true) {
 				
 					input = (IMessage)inputStream.readObject();
@@ -83,6 +85,10 @@ class ServerThread extends Thread{
 			e.printStackTrace();
 		} 
 		
+	}
+
+	public ObjectOutputStream getOutputStream() {
+		return outputStream;
 	}
 	
 }

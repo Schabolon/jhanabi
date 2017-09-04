@@ -1,8 +1,6 @@
 package hanabi.server;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,13 +11,13 @@ import hanabi.Player;
 
 public class GameServer implements IServer{
 	
-	Map<Player, Socket> playersBySocket;
+	Map<Player, ClientThread> playersBySocket;
 	
 	public GameServer() {
 		playersBySocket = new HashMap<>();
 	}
 	
-	public void addPlayer(Player player, Socket socket) {
+	public void addPlayer(Player player, ClientThread socket) {
 		playersBySocket.put(player, socket);
 	}
 	
@@ -39,6 +37,7 @@ public class GameServer implements IServer{
 		Message.MessageType messageType = msg.getMessageType();
 		switch(messageType) {
 		case START:
+			System.out.println("Server recieved start message");
 			startGame();
 			break;
 		case NEWCARD:
@@ -60,10 +59,10 @@ public class GameServer implements IServer{
 	}
 	
 	private void startGame() {
-		for(Socket socket : playersBySocket.values()) {
+		for(ClientThread clientThread : playersBySocket.values()) {
 			try {
-				ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
-				outputStream.writeObject(new Message(MessageType.START));
+				
+				clientThread.getOutputStream().writeObject(new Message(MessageType.START));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
