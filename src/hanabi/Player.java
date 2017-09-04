@@ -1,6 +1,7 @@
 package hanabi;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Player implements Serializable {
@@ -12,6 +13,7 @@ public class Player implements Serializable {
 
 	public Player(int i) {
 		this.playerName = "Player " + Integer.toString(i);
+		cardList = new ArrayList<>();
 	}
 
 	public List<Card> getCardList() {

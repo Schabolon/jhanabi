@@ -35,7 +35,7 @@ public class Client implements IClient {
 		client.connect();
 		client.listenToServer();
 		client.sendMessage(new Message(MessageType.START));
-//		client.sendMessage(new Message(MessageType.QUIT));
+		// client.sendMessage(new Message(MessageType.QUIT));
 	}
 
 	@Override
@@ -102,6 +102,10 @@ public class Client implements IClient {
 		case "c":
 			playCard();
 			break;
+		default:
+			System.out.println("Wrong Input");
+			startTurn();
+			break;
 		}
 	}
 
@@ -120,6 +124,10 @@ public class Client implements IClient {
 			break;
 		case "b":
 			giveColorHint();
+			break;
+		default:
+			System.out.println("Wrong Input");
+			startTurn();
 			break;
 		}
 	}

@@ -122,7 +122,7 @@ public class GameServer implements IServer {
 	 */
 	private void startGameHandler(ClientThread source, Message msg) {
 		Player sender = source.getPlayer();
-		if (!playersReady.containsKey(sender)) {
+		if (!playersReady.get(sender)) {
 			playersReady.put(sender, true);
 		}
 		if (allPlayersReady()) {
