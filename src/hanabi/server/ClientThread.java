@@ -15,6 +15,7 @@ public class ClientThread extends Thread {
 	private IMessage input = null;
 	private GameServer game;
 	private Player player;
+	boolean socketIsClosed = false;
 
 	public ClientThread(GameServer game, Socket socket, int n) {
 		super("ClientThread " + n);
@@ -32,6 +33,9 @@ public class ClientThread extends Thread {
 			while (true) {
 				input = (IMessage) inputStream.readObject();
 				game.readMessage(this, input);
+				if (socketIsClosed) {
+					break;
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -50,10 +54,6 @@ public class ClientThread extends Thread {
 	}
 
 	public void closeSocket() {
-		try {
-			socket.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		socketIsClosed = true;
 	}
 }

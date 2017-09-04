@@ -27,9 +27,6 @@ public interface IServer {
 
 	/**
 	 * adds a certain player to the game
-	 * 
-	 * @param player
-	 *            player to add to the game
 	 */
 	void addPlayer(Player player, ClientThread thread);
 
