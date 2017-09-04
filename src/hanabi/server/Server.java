@@ -24,6 +24,7 @@ public class Server {
 		GameServer game = new GameServer();
 		try {
 			serverSocket = new ServerSocket(PORT);
+			System.out.println("Server started");
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("Server Error");
