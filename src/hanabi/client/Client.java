@@ -1,7 +1,9 @@
 package hanabi.client;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -9,18 +11,19 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import hanabi.IMessage;
+import hanabi.Message.MessageType;
 
 public class Client implements IClient {
 
 	private String hostName;
 	private int port;
-	
+
 	private Socket socket;
 	private ObjectInputStream objectInputStream;
 	private ObjectOutputStream objectOutputStream;
 
 	private Thread clientServerListener;
-	
+
 	public Client(String hostName, int port) {
 		this.hostName = hostName;
 		this.port = port;
@@ -44,9 +47,73 @@ public class Client implements IClient {
 
 	@Override
 	public void readMessage(IMessage msg) {
+		MessageType messageType = msg.getMessageType();
+		switch (messageType) {
+		case START:
+			break;
+		case NEWCARD:
+			break;
+		case QUIT:
+			break;
+		case STATUS:
+			break;
+		case TURNACTION:
+			break;
+		case TURNEND:
+			System.out.println("It's the next players turn");
+			break;
+		case TURNSTART:
+			startTurn();
+			break;
+		default:
+			System.out.println("Unknown Message Type");
+			break;
+		}
 		System.out.println("Message recieved");
 	}
+
+	private void startTurn() {
+		System.out.println("Its your turn!");
+		System.out.println("Please choose one of the following options:");
+		System.out.println("A: Give a hint");
+		System.out.println("B: Discard a card");
+		System.out.println("C: Play a card");
+
+		BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+
+		String userInput = null;
+		try {
+			userInput = stdIn.readLine();
+		} catch (IOException e) {
+			System.out.println("Couldn't read user input");
+			e.printStackTrace();
+		}
+		processUserInput(userInput);
+	}
+
+	private void processUserInput(String input) {
+		switch (input.toLowerCase()) {
+		case "a":
+			giveHint();
+		case "b":
+			discardCard();
+		case "c":
+			playCard();
+		}
+	}
+
+	private void giveHint() {
+		System.out.println("AAA");
+	}
+
+	private void discardCard() {
+		System.out.println("BBB");
+	}
 	
+	private void playCard() {
+		System.out.println("CCC");
+	}
+
 	@Override
 	public boolean connect() {
 		Socket socket = null;
@@ -135,12 +202,12 @@ class ClientServerListener extends Thread {
 	ObjectInputStream objectInputStream;
 	Client client;
 	boolean listenToServer = true;
-	
+
 	public ClientServerListener(ObjectInputStream objectInputStream, Client client) {
 		this.objectInputStream = objectInputStream;
 		this.client = client;
 	}
-	
+
 	@Override
 	public void run() {
 		while (listenToServer) {
@@ -158,5 +225,5 @@ class ClientServerListener extends Thread {
 			client.readMessage(msg);
 		}
 	}
-	
+
 }
