@@ -1,5 +1,7 @@
 package hanabi.client;
 
+import java.net.Socket;
+
 import hanabi.IMessage;
 
 public interface IClient {
@@ -13,5 +15,7 @@ public interface IClient {
 	public void listenToServer();
 	
 	public boolean disconnect();
+	
+	public Socket getSocket();
 	
 }

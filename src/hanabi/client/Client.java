@@ -19,7 +19,6 @@ public class Client implements IClient {
 	private int port;
 
 	private Socket socket;
-	private ObjectInputStream objectInputStream;
 	private ObjectOutputStream objectOutputStream;
 
 	private Thread clientServerListener;
@@ -122,9 +121,13 @@ public class Client implements IClient {
 
 	@Override
 	public boolean connect() {
+		System.out.println("Trying to connect ...");
 		Socket socket = null;
 		try {
 			socket = new Socket(hostName, port);
+			this.socket = socket;
+			objectOutputStream = getObjectOutputStream();
+			System.out.println("Connection established");
 		} catch (UnknownHostException e) {
 			System.out.println("Unknown Host: " + hostName);
 			e.printStackTrace();
@@ -134,34 +137,7 @@ public class Client implements IClient {
 			e.printStackTrace();
 			return false;
 		}
-		this.socket = socket;
-		initializeObjectStreams();
-		System.out.println("Connection established");
 		return true;
-	}
-
-	private void initializeObjectStreams() {
-		objectInputStream = getObjectInputStream();
-		objectOutputStream = getObjectOutputStream();
-	}
-
-	private ObjectInputStream getObjectInputStream() {
-		InputStream inputStream = null;
-		try {
-			inputStream = socket.getInputStream();
-		} catch (IOException e) {
-			System.out.println("Couldn't get InputStream");
-			e.printStackTrace();
-		}
-
-		ObjectInputStream objectInputStream = null;
-		try {
-			objectInputStream = new ObjectInputStream(inputStream);
-		} catch (IOException e) {
-			System.out.println("Couldn't get ObjectInputStream");
-			e.printStackTrace();
-		}
-		return objectInputStream;
 	}
 
 	private ObjectOutputStream getObjectOutputStream() {
@@ -185,7 +161,7 @@ public class Client implements IClient {
 
 	@Override
 	public void listenToServer() {
-		clientServerListener = new ClientServerListener(objectInputStream, this);
+		clientServerListener = new ClientServerListener(this);
 		clientServerListener.start();
 	}
 
@@ -201,6 +177,11 @@ public class Client implements IClient {
 		}
 		return true;
 	}
+
+	@Override
+	public Socket getSocket() {
+		return socket;
+	}
 }
 
 class ClientServerListener extends Thread {
@@ -209,9 +190,9 @@ class ClientServerListener extends Thread {
 	Client client;
 	boolean listenToServer = true;
 
-	public ClientServerListener(ObjectInputStream objectInputStream, Client client) {
-		this.objectInputStream = objectInputStream;
+	public ClientServerListener(Client client) {
 		this.client = client;
+		objectInputStream = getObjectInputStream();
 	}
 
 	@Override
@@ -230,6 +211,25 @@ class ClientServerListener extends Thread {
 			IMessage msg = (IMessage) object;
 			client.readMessage(msg);
 		}
+	}
+	
+	private ObjectInputStream getObjectInputStream() {
+		InputStream inputStream = null;
+		try {
+			inputStream = client.getSocket().getInputStream();
+		} catch (IOException e) {
+			System.out.println("Couldn't get InputStream");
+			e.printStackTrace();
+		}
+
+		ObjectInputStream objectInputStream = null;
+		try {
+			objectInputStream = new ObjectInputStream(inputStream);
+		} catch (IOException e) {
+			System.out.println("Couldn't get ObjectInputStream");
+			e.printStackTrace();
+		}
+		return objectInputStream;
 	}
 
 }
