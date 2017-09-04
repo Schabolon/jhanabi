@@ -1,6 +1,8 @@
 package hanabi;
 
-public class Message implements IMessage {
+import java.io.Serializable;
+
+public class Message implements IMessage, Serializable{
 
 	private MessageType messageType;
 	private Player player;
