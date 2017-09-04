@@ -42,18 +42,22 @@ public class GameServer implements IServer {
 
 	}
 
+	/**
+	 * Handles the different message types that the server recieves from the clients
+	 */
 	private void handleMessage(ClientThread source, IMessage msg) {
 		Message.MessageType messageType = msg.getMessageType();
 		switch (messageType) {
 		case START:
 			System.out.println("Server recieved START message from " + source.getName());
-			startGame(source, (Message) msg);
+			startGameHandler(source, (Message) msg);
 			break;
 		case NEWCARD:
 			System.out.println("Server recieved NEWCARD message from " + source.getName());
 			break;
 		case QUIT:
 			System.out.println("Server recieved QUIT message from " + source.getName());
+			quitGameHandler(source, (Message) msg);
 			break;
 		case STATUS:
 			System.out.println("Server recieved STATUS message from " + source.getName());
@@ -73,26 +77,21 @@ public class GameServer implements IServer {
 		}
 	}
 
-	private void startGame(ClientThread source, Message msg) {
-		Player sender = source.getPlayer();
-		if (!playersReady.containsKey(sender)) {
-			playersReady.put(sender, true);
-		}
-		if (allPlayersReady()) {
-			sendAll(new Message(MessageType.START));
-		}
-	}
-
+	/**
+	 * sends a message to all clients in the game
+	 */
 	private void sendAll(Message msg) {
 		for (ClientThread reciever : playersByClientThread.values()) {
-			try {
-				reciever.getOutputStream().writeObject(msg);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			sendMessage(reciever, msg);
 		}
 	}
 
+	/**
+	 * checks when the game contains more then two players, if everyone already sent
+	 * a
+	 * 
+	 * @return
+	 */
 	private boolean allPlayersReady() {
 		if (players.size() < 2) {
 			return false;
@@ -103,5 +102,41 @@ public class GameServer implements IServer {
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * removes a certain player from the game
+	 */
+	private void removePlayer(Player player) {
+		players.remove(player);
+		playersByClientThread.remove(player);
+		playersReady.remove(player);
+	}
+
+	/**
+	 * Handler for messages of type START
+	 */
+	private void startGameHandler(ClientThread source, Message msg) {
+		Player sender = source.getPlayer();
+		if (!playersReady.containsKey(sender)) {
+			playersReady.put(sender, true);
+		}
+		if (allPlayersReady()) {
+			sendAll(new Message(MessageType.START));
+		}
+	}
+
+	/**
+	 * Handler for messages of type QUIT
+	 */
+	private void quitGameHandler(ClientThread source, Message msg) {
+		Player quittingPlayer = source.getPlayer();
+		sendMessage(source, new Message(MessageType.QUIT, quittingPlayer));
+		removePlayer(quittingPlayer);
+		source.closeSocket();
+		for (Player remainingPlayer : players) {
+			sendMessage(playersByClientThread.get(remainingPlayer), new Message(MessageType.QUIT, quittingPlayer));
+		}
+
 	}
 }

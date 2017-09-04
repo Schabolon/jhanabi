@@ -48,4 +48,12 @@ public class ClientThread extends Thread {
 	public Player getPlayer() {
 		return player;
 	}
+
+	public void closeSocket() {
+		try {
+			socket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
