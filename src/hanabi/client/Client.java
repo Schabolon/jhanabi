@@ -12,17 +12,18 @@ import hanabi.IMessage;
 
 public class Client implements IClient {
 
-	private int port;
 	private String hostName;
+	private int port;
+	
 	private Socket socket;
 	private ObjectInputStream objectInputStream;
 	private ObjectOutputStream objectOutputStream;
 
 	private Thread clientServerListener;
 	
-	public Client(int port, String hostName) {
-		this.port = port;
+	public Client(String hostName, int port) {
 		this.hostName = hostName;
+		this.port = port;
 	}
 
 	@Override
