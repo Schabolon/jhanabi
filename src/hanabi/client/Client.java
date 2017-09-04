@@ -2,11 +2,9 @@ package hanabi.client;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -56,13 +54,16 @@ public class Client implements IClient {
 	public void readMessage(IMessage msg) {
 		MessageType messageType = msg.getMessageType();
 		switch (messageType) {
-		case START: System.out.println("The Game is starting.");
+		case START:
+			System.out.println("The Game is starting.");
 			break;
 		case NEWCARD:
 			break;
-		case QUIT: System.out.println("Stopping the game");
+		case QUIT:
+			System.out.println("Stopping the game");
 			break;
-		case STATUS: System.out.println("Updating game information");
+		case STATUS:
+			System.out.println("Updating game information");
 			break;
 		case TURNACTION:
 			break;
@@ -107,34 +108,48 @@ public class Client implements IClient {
 		System.out.println("Please choose which kind of hint you want to give:");
 		System.out.println("A: Value Hint");
 		System.out.println("B: Color Hint");
+		processUserHintKind();
 	}
 
 	private void processUserHintKind() {
 		String userInput = getUserInput();
 		switch (userInput.toLowerCase()) {
-		case "a":
-		break;
-		case "b":
+		case "a": giveValueHint();
+			break;
+		case "b": giveColorHint();
 			break;
 		}
+	}
+
+	private void giveValueHint() {
+		System.out.println("Please choose which a number value (1-5)");
+		int numberValue = Integer.parseInt(getUserInput());
+		System.out.println("Please choose the player (1-4) you want to give the hint");
+		int playerNumber = Integer.parseInt(getUserInput());
+	}
+	
+	private void giveColorHint() {
+		System.out.println("Please choose a color (red, green, blue, yellow)");
+		String color = getUserInput();
+		System.out.println("Please choose the player (1-4) you want to give the hint");
 	}
 	
 	private void discardCard() {
 		System.out.println("Please choose the position (1-5) of the card you want to discard:");
 		int cardPosition = getCardPositionUserInput();
-		//TODO send data to server
+		// TODO send data to server
 	}
 
 	private void playCard() {
 		System.out.println("Please choose the position (1-5) of the card you want to play:");
 		int cardPosition = getCardPositionUserInput();
-		//TODO send data to server
+		// TODO send data to server
 	}
 
 	private int getCardPositionUserInput() {
 		return Integer.parseInt(getUserInput());
 	}
-	
+
 	private String getUserInput() {
 		BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 
@@ -147,7 +162,7 @@ public class Client implements IClient {
 		}
 		return userInput;
 	}
-	
+
 	@Override
 	public boolean connect() {
 		System.out.println("Trying to connect ...");
@@ -236,7 +251,7 @@ class ClientServerListener extends Thread {
 			client.readMessage(msg);
 		}
 	}
-	
+
 	private ObjectInputStream getObjectInputStream() {
 		ObjectInputStream objectInputStream = null;
 		try {
