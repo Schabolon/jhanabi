@@ -4,7 +4,7 @@ public interface IMessage {
 
 	public Player getPlayer();
 	
-	public MessageType getMessageType();
+	public String getMessageType();
 	
 	public Card getCard();
 	
