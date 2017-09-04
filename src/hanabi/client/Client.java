@@ -77,7 +77,7 @@ public class Client implements IClient {
 			System.out.println("Unknown Message Type");
 			break;
 		}
-		System.out.println("Message recieved");
+		System.out.println("Message received");
 	}
 
 	private void startTurn() {
@@ -241,7 +241,7 @@ class ClientServerListener extends Thread {
 			try {
 				object = objectInputStream.readObject();
 			} catch (ClassNotFoundException e) {
-				System.out.println("The class recieved from the server was not found");
+				System.out.println("The class received from the server was not found");
 				e.printStackTrace();
 			} catch (IOException e) {
 				System.out.println("An error occured while listening to the server");
