@@ -3,7 +3,6 @@ package hanabi.client;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -24,7 +23,7 @@ public class Client implements IClient {
 	private Socket socket;
 	private ObjectOutputStream objectOutputStream;
 
-	private Thread clientServerListener;
+	private ClientServerListener clientServerListener;
 
 	public Client(String hostName, int port) {
 		this.hostName = hostName;
@@ -35,7 +34,7 @@ public class Client implements IClient {
 		Client client = new Client("10.10.10.247", 1024);
 		client.connect();
 		client.listenToServer();
-		client.sendMessage(new Message(MessageType.START));
+		client.sendMessage(new Message(MessageType.QUIT));
 	}
 
 	@Override
@@ -216,7 +215,7 @@ public class Client implements IClient {
 	@Override
 	public boolean disconnect() {
 		System.out.println("Disconnecting ...");
-		clientServerListener.interrupt();
+		clientServerListener.terminate();
 		try {
 			socket.close();
 		} catch (IOException e) {
@@ -232,47 +231,4 @@ public class Client implements IClient {
 	public Socket getSocket() {
 		return socket;
 	}
-}
-
-class ClientServerListener extends Thread {
-
-	ObjectInputStream objectInputStream;
-	Client client;
-	boolean listenToServer = true;
-
-	public ClientServerListener(Client client) {
-		this.client = client;
-		objectInputStream = getObjectInputStream();
-	}
-
-	@Override
-	public void run() {
-		System.out.println("Started listening ...");
-		while (listenToServer) {
-			Object object = null;
-			try {
-				object = objectInputStream.readObject();
-			} catch (ClassNotFoundException e) {
-				System.out.println("The class received from the server was not found");
-				e.printStackTrace();
-			} catch (IOException e) {
-				System.out.println("An error occured while listening to the server");
-				e.printStackTrace();
-			}
-			IMessage msg = (IMessage) object;
-			client.readMessage(msg);
-		}
-	}
-
-	private ObjectInputStream getObjectInputStream() {
-		ObjectInputStream objectInputStream = null;
-		try {
-			objectInputStream = new ObjectInputStream(client.getSocket().getInputStream());
-		} catch (IOException e) {
-			System.out.println("Couldn't get ObjectInputStream");
-			e.printStackTrace();
-		}
-		return objectInputStream;
-	}
-
 }
