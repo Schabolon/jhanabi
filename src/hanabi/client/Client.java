@@ -63,6 +63,7 @@ public class Client implements IClient {
 		}
 		this.socket = socket;
 		initializeObjectStreams();
+		System.out.println("Connection established");
 		return true;
 	}
 
