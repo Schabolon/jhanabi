@@ -9,11 +9,13 @@ import java.net.Socket;
 
 public class Server {
 	static final int PORT = 1024;
+	static int n = 0;
 	
 	public static void main (String[] args) {
 		
 		Socket socket = null;
 		ServerSocket serverSocket = null;
+		boolean listeningForClients = true;
 		
 		try {
 			serverSocket = new ServerSocket(PORT);
@@ -22,7 +24,7 @@ public class Server {
 			System.out.println("Server Error");
 		}
 		
-		while(true) {
+		while(listeningForClients) {
 			
 				try {
 					socket = serverSocket.accept();
@@ -31,7 +33,7 @@ public class Server {
 					System.out.println("Connection failed");
 				}
 				System.out.println("Connection established");
-				ServerThread serverThread = new ServerThread(socket);
+				ServerThread serverThread = new ServerThread(socket, n++);
 				serverThread.start();
 			
 			
@@ -41,18 +43,39 @@ public class Server {
 }
 
 class ServerThread extends Thread{
-	String input = null;
-	BufferedReader inputStream = null;
-	PrintWriter outputStream = null;
 	Socket socket = null;
+	String input = null;
+
 	
-	public ServerThread(Socket socket) {
+	
+	
+	public ServerThread(Socket socket, int n) {
+		super("serverThread " + n);
 		this.socket = socket;
 	}
 	
 	public void run() {
-		inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		outputStream = new PrintWriter(socket.getOutputStream());
+		try {
+			BufferedReader inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			PrintWriter outputStream = new PrintWriter(socket.getOutputStream(), true);
+			
+			while(true) {
+				
+					input = inputStream.readLine();
+					if(input.equalsIgnoreCase("QUIT")) {
+						socket.close();
+					}
+					else {
+						// do something with input
+						// give something to outputStream 
+					}
+				}
+			
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+		
 	}
 	
 }
