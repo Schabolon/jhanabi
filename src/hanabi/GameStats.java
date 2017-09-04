@@ -12,7 +12,7 @@ public class GameStats {
 	private List<Card> trayStack = new ArrayList<>();
 	private int stormCount = 0;
 	private int noteCount = 8;
-
+	
 	public GameStats() {
 		createCarddeck();
 		shuffle();

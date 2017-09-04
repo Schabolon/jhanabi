@@ -10,6 +10,7 @@ import hanabi.GameStats;
 import hanabi.IMessage;
 import hanabi.Message;
 import hanabi.Message.MessageType;
+import hanabi.Message.PlayerActions;
 import hanabi.Player;
 
 public class GameServer implements IServer {
@@ -68,6 +69,7 @@ public class GameServer implements IServer {
 			break;
 		case TURNACTION:
 			System.out.println("Server recieved TURNACTION message from " + source.getName());
+			gameActionHandler(source, (Message) msg);
 			break;
 		case TURNEND:
 			System.out.println("Server recieved TURNEND message from " + source.getName());
@@ -134,6 +136,23 @@ public class GameServer implements IServer {
 		}
 	}
 
+	private void gameActionHandler(ClientThread source, Message msg) {
+		PlayerActions playerActions = msg.getPlayerActions();
+		switch(playerActions) {
+		case DISCARD:
+			source.getPlayer().removeCard(msg.getCard().getPosition());
+			break;
+		case GIVE_COLOR_HINT:
+			break;
+		case GIVE_NUMBER_HINT:
+			break;
+		case PLAY_CARD:
+			break;
+		default:
+			break;
+		}
+	}
+	
 	/**
 	 * Handler for messages of type QUIT
 	 */
