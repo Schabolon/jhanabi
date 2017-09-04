@@ -11,6 +11,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import hanabi.IMessage;
+import hanabi.Message;
 import hanabi.Message.MessageType;
 
 public class Client implements IClient {
@@ -32,6 +33,7 @@ public class Client implements IClient {
 		Client client = new Client("localhost", 1024);
 		client.connect();
 		client.listenToServer();
+		client.sendMessage(new Message(MessageType.START));
 	}
 
 	@Override
@@ -54,13 +56,13 @@ public class Client implements IClient {
 	public void readMessage(IMessage msg) {
 		MessageType messageType = msg.getMessageType();
 		switch (messageType) {
-		case START:
+		case START: System.out.println("The Game is starting.");
 			break;
 		case NEWCARD:
 			break;
-		case QUIT:
+		case QUIT: System.out.println("Stopping the game");
 			break;
-		case STATUS:
+		case STATUS: System.out.println("Updating game information");
 			break;
 		case TURNACTION:
 			break;
@@ -84,6 +86,56 @@ public class Client implements IClient {
 		System.out.println("B: Discard a card");
 		System.out.println("C: Play a card");
 
+		processUserFirstChoice(getUserInput());
+	}
+
+	private void processUserFirstChoice(String input) {
+		switch (input.toLowerCase()) {
+		case "a":
+			giveHint();
+			break;
+		case "b":
+			discardCard();
+			break;
+		case "c":
+			playCard();
+			break;
+		}
+	}
+
+	private void giveHint() {
+		System.out.println("Please choose which kind of hint you want to give:");
+		System.out.println("A: Value Hint");
+		System.out.println("B: Color Hint");
+	}
+
+	private void processUserHintKind() {
+		String userInput = getUserInput();
+		switch (userInput.toLowerCase()) {
+		case "a":
+		break;
+		case "b":
+			break;
+		}
+	}
+	
+	private void discardCard() {
+		System.out.println("Please choose the position (1-5) of the card you want to discard:");
+		int cardPosition = getCardPositionUserInput();
+		//TODO send data to server
+	}
+
+	private void playCard() {
+		System.out.println("Please choose the position (1-5) of the card you want to play:");
+		int cardPosition = getCardPositionUserInput();
+		//TODO send data to server
+	}
+
+	private int getCardPositionUserInput() {
+		return Integer.parseInt(getUserInput());
+	}
+	
+	private String getUserInput() {
 		BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 
 		String userInput = null;
@@ -93,32 +145,9 @@ public class Client implements IClient {
 			System.out.println("Couldn't read user input");
 			e.printStackTrace();
 		}
-		processUserInput(userInput);
+		return userInput;
 	}
-
-	private void processUserInput(String input) {
-		switch (input.toLowerCase()) {
-		case "a":
-			giveHint();
-		case "b":
-			discardCard();
-		case "c":
-			playCard();
-		}
-	}
-
-	private void giveHint() {
-		System.out.println("AAA");
-	}
-
-	private void discardCard() {
-		System.out.println("BBB");
-	}
-
-	private void playCard() {
-		System.out.println("CCC");
-	}
-
+	
 	@Override
 	public boolean connect() {
 		System.out.println("Trying to connect ...");
@@ -141,17 +170,9 @@ public class Client implements IClient {
 	}
 
 	private ObjectOutputStream getObjectOutputStream() {
-		OutputStream outputStream = null;
-		try {
-			outputStream = socket.getOutputStream();
-		} catch (IOException e) {
-			System.out.println("Couldn't get OutputStream");
-			e.printStackTrace();
-		}
-
 		ObjectOutputStream objectOutputStream = null;
 		try {
-			objectOutputStream = new ObjectOutputStream(outputStream);
+			objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
 		} catch (IOException e) {
 			System.out.println("Couldn't get ObjectOutputStream");
 			e.printStackTrace();
@@ -167,6 +188,7 @@ public class Client implements IClient {
 
 	@Override
 	public boolean disconnect() {
+		System.out.println("Disconnecting ...");
 		clientServerListener.interrupt();
 		try {
 			socket.close();
@@ -175,6 +197,7 @@ public class Client implements IClient {
 			System.out.println("Couldn't disconnect");
 			return false;
 		}
+		System.out.println("Disconnected");
 		return true;
 	}
 
@@ -197,6 +220,7 @@ class ClientServerListener extends Thread {
 
 	@Override
 	public void run() {
+		System.out.println("Started listening ...");
 		while (listenToServer) {
 			Object object = null;
 			try {
@@ -214,17 +238,9 @@ class ClientServerListener extends Thread {
 	}
 	
 	private ObjectInputStream getObjectInputStream() {
-		InputStream inputStream = null;
-		try {
-			inputStream = client.getSocket().getInputStream();
-		} catch (IOException e) {
-			System.out.println("Couldn't get InputStream");
-			e.printStackTrace();
-		}
-
 		ObjectInputStream objectInputStream = null;
 		try {
-			objectInputStream = new ObjectInputStream(inputStream);
+			objectInputStream = new ObjectInputStream(client.getSocket().getInputStream());
 		} catch (IOException e) {
 			System.out.println("Couldn't get ObjectInputStream");
 			e.printStackTrace();
