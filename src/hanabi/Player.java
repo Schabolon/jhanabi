@@ -1,8 +1,12 @@
 package hanabi;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Player {
+public class Player implements Serializable {
+
+	private static final long serialVersionUID = -5801295088864066878L;
+
 	private String playerName;
 	private List<Card> cardList;
 
@@ -21,11 +25,11 @@ public class Player {
 	public void handoutNewCard(Card card) {
 		cardList.add(card);
 	}
-	
+
 	public void removeCard(int position) {
 		cardList.remove(position);
 	}
-	
+
 	public String getPlayerName() {
 		return playerName;
 	}
