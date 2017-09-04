@@ -32,7 +32,7 @@ public class Client implements IClient {
 	}
 
 	public static void main(String[] args) {
-		Client client = new Client("localhost", 1024);
+		Client client = new Client("10.10.10.247", 1024);
 		client.connect();
 		client.listenToServer();
 		client.sendMessage(new Message(MessageType.START));

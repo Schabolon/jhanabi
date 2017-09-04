@@ -1,11 +1,14 @@
 package hanabi.server;
 
 import hanabi.IMessage;
+import hanabi.Player;
 
 public interface IServer {
 
-	public void sendMessage(IMessage msg);
-	
-	public void readMessage(IMessage msg);
-	
+	void sendMessage(ClientThread reciever, IMessage msg);
+
+	void readMessage(ClientThread source, IMessage msg);
+
+	void addPlayer(Player player, ClientThread thread);
+
 }

@@ -4,6 +4,8 @@ import java.net.Socket;
 
 import hanabi.IMessage;
 
+
+
 public interface IClient {
 
 	public void sendMessage(IMessage msg);
