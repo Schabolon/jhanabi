@@ -128,7 +128,8 @@ public class Client implements IClient {
 		int numberValue = Integer.parseInt(getUserInput());
 		System.out.println("Please choose the player (1-4) you want to give the hint");
 		int playerNumber = Integer.parseInt(getUserInput());
-		Message msg = new Message(MessageType.TURNACTION, new Player(playerNumber), PlayerActions.GIVE_NUMBER_HINT, numberValue);
+		Message msg = new Message(MessageType.TURNACTION, new Player(playerNumber), PlayerActions.GIVE_NUMBER_HINT,
+				numberValue);
 		sendMessage(msg);
 	}
 

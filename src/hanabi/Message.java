@@ -13,36 +13,6 @@ public class Message implements IMessage, Serializable {
 	private ColorType colorType;
 	private int numberValue;
 
-	public enum MessageType {
-		START, QUIT, TURNSTART, TURNACTION, NEWCARD, TURNEND, STATUS;
-	}
-
-	public enum PlayerActions {
-		DISCARD, GIVE_COLOR_HINT, GIVE_NUMBER_HINT, PLAY_CARD;
-	}
-
-	public enum ColorType {
-		RED, YELLOW, GREEN, BLUE, WHITE;
-
-		public static ColorType getColorFromString(String color) {
-			switch (color.toLowerCase()) {
-			case "red":
-				return RED;
-			case "yellow":
-				return YELLOW;
-			case "green":
-				return GREEN;
-			case "blue":
-				return BLUE;
-			case "white":
-				return WHITE;
-			default:
-				return null;
-			}
-
-		}
-	}
-
 	public Message(MessageType messageType) {
 		this.messageType = messageType;
 	}
@@ -129,4 +99,34 @@ public class Message implements IMessage, Serializable {
 		return numberValue;
 	}
 
+	public enum MessageType {
+		START, QUIT, TURNSTART, TURNACTION, NEWCARD, TURNEND, STATUS;
+	}
+
+	public enum PlayerActions {
+		DISCARD, GIVE_COLOR_HINT, GIVE_NUMBER_HINT, PLAY_CARD;
+	}
+
+	public enum ColorType {
+		RED, YELLOW, GREEN, BLUE, WHITE;
+
+		public static ColorType getColorFromString(String color) {
+			switch (color.toLowerCase()) {
+			case "red":
+				return RED;
+			case "yellow":
+				return YELLOW;
+			case "green":
+				return GREEN;
+			case "blue":
+				return BLUE;
+			case "white":
+				return WHITE;
+			default:
+				return null;
+			}
+
+		}
+	}
+	
 }
