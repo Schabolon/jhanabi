@@ -8,12 +8,12 @@ public interface IServer {
 	/**
 	 * sends a message back to a client
 	 * 
-	 * @param reciever
-	 *            client to recieve the message
+	 * @param receiver
+	 *            client to receive the message
 	 * @param msg
 	 *            message to send to the client
 	 */
-	void sendMessage(ClientThread reciever, IMessage msg);
+	void sendMessage(ClientThread receiver, IMessage msg);
 
 	/**
 	 * reads a message sent from a client

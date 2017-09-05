@@ -36,9 +36,9 @@ public class GameServer implements IServer {
 	}
 
 	@Override
-	public void sendMessage(ClientThread reciever, IMessage msg) {
+	public void sendMessage(ClientThread receiver, IMessage msg) {
 		try {
-			reciever.getOutputStream().writeObject(msg);
+			receiver.getOutputStream().writeObject(msg);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -51,38 +51,38 @@ public class GameServer implements IServer {
 	}
 
 	/**
-	 * Handles the different message types that the server recieves from the
+	 * Handles the different message types that the server receives from the
 	 * clients
 	 */
 	private void handleMessage(ClientThread source, IMessage msg) {
 		Message.MessageType messageType = msg.getMessageType();
 		switch (messageType) {
 		case START:
-			System.out.println("Server recieved START message from " + source.getName());
+			System.out.println("Server received START message from " + source.getName());
 			startGameHandler(source, (Message) msg);
 			break;
 		case NEWCARD:
-			System.out.println("Server recieved NEWCARD message from " + source.getName());
+			System.out.println("Server received NEWCARD message from " + source.getName());
 			break;
 		case QUIT:
-			System.out.println("Server recieved QUIT message from " + source.getName());
+			System.out.println("Server received QUIT message from " + source.getName());
 			quitGameHandler(source, (Message) msg);
 			break;
 		case STATUS_COLOR_HINT:
-			System.out.println("Server recieved STATUS_COLOR_HINT message from " + source.getName());
+			System.out.println("Server received STATUS_COLOR_HINT message from " + source.getName());
 			break;
 		case STATUS_NUMBER_HINT:
-			System.out.println("Server recieved STATUS_COLOR_HINT message from " + source.getName());
+			System.out.println("Server received STATUS_COLOR_HINT message from " + source.getName());
 			break;
 		case TURNACTION:
-			System.out.println("Server recieved TURNACTION message from " + source.getName());
+			System.out.println("Server received TURNACTION message from " + source.getName());
 			gameActionHandler(source, (Message) msg);
 			break;
 		case TURNEND:
-			System.out.println("Server recieved TURNEND message from " + source.getName());
+			System.out.println("Server received TURNEND message from " + source.getName());
 			break;
 		case TURNSTART:
-			System.out.println("Server recieved TURNSTART message from " + source.getName());
+			System.out.println("Server received TURNSTART message from " + source.getName());
 			break;
 		default:
 			break;
@@ -94,15 +94,15 @@ public class GameServer implements IServer {
 	 * sends a message to all clients in the game
 	 */
 	private void sendAll(Message msg) {
-		for (ClientThread reciever : playersByClientThread.values()) {
-			sendMessage(reciever, msg);
+		for (ClientThread receiver : playersByClientThread.values()) {
+			sendMessage(receiver, msg);
 		}
 	}
 
 	private void sendAllExcept(Message msg, Player excluded) {
-		for (ClientThread reciever : playersByClientThread.values()) {
-			if (!playersByClientThread.get(excluded).equals(reciever)) {
-				sendMessage(reciever, msg);
+		for (ClientThread receiver : playersByClientThread.values()) {
+			if (!playersByClientThread.get(excluded).equals(receiver)) {
+				sendMessage(receiver, msg);
 			}
 		}
 	}
