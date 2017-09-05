@@ -1,5 +1,8 @@
 package hanabi;
 
+import java.util.List;
+
+import hanabi.Message.ColorType;
 import hanabi.Message.MessageType;
 
 public interface IMessage {
@@ -11,5 +14,11 @@ public interface IMessage {
 	public Card getCard();
 	
 	public Turn getTurn();
+	
+	public ColorType getColorType();
+	
+	public List<Card> getCardList();
+	
+	public int getNumberValue();
 	
 }

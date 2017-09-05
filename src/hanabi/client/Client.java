@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.List;
 
 import hanabi.Card;
 import hanabi.IMessage;
@@ -58,13 +59,22 @@ public class Client implements IClient {
 			System.out.println("The Game is starting.");
 			break;
 		case NEWCARD:
+			System.out.println("The " + msg.getPlayer().getPlayerName() + " has drawn a new Card with the values color "
+					+ msg.getCard().getColor() + " and the number value " + msg.getCard().getNumberValue());
 			break;
 		case QUIT:
 			System.out.println("Stopping the game");
 			this.disconnect();
 			break;
-		case STATUS:
+		case STATUS_COLOR_HINT:
+			System.out.println("Updating game information:");
+			System.out.println("The " + msg.getPlayer().getPlayerName() + " has " + msg.getColorType()
+					+ " cards at the positions " + msg.getCardList().toString());
+			break;
+		case STATUS_NUMBER_HINT:
 			System.out.println("Updating game information");
+			System.out.println("The " + msg.getPlayer().getPlayerName() + " has cards with the value '"
+					+ msg.getNumberValue() + "' at the positions " + msg.getCardList().toString());
 			break;
 		case TURNACTION:
 			System.out.println("Wrong MessageType");

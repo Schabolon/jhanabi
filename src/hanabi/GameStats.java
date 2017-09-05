@@ -12,7 +12,8 @@ public class GameStats {
 	private List<Card> trayStack = new ArrayList<>();
 	private int stormCount = 0;
 	private int noteCount = 8;
-	
+	private Board board;
+
 	public GameStats() {
 		createCarddeck();
 		shuffle();
@@ -51,8 +52,10 @@ public class GameStats {
 		}
 	}
 
-	private Card drawCardFromDeck() {
-		return carddeck.get(carddeck.size() - 1);
+	public Card drawCardFromDeck() {
+		Card drawnCard = carddeck.get(carddeck.size() - 1);
+		carddeck.remove(carddeck.size() - 1);
+		return drawnCard;
 	}
 
 	private void shuffle() {
@@ -89,6 +92,17 @@ public class GameStats {
 
 	public int getNoteCount() {
 		return noteCount;
+	}
+
+	public Board getBoard() {
+		return board;
+	}
+
+	public boolean canPlayerDiscard() {
+		if (noteCount == 8) {
+			return false;
+		}
+		return true;
 	}
 
 }

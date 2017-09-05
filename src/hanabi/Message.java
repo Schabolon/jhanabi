@@ -1,6 +1,9 @@
 package hanabi;
 
 import java.io.Serializable;
+import java.util.List;
+
+import hanabi.Message.MessageType;
 
 public class Message implements IMessage, Serializable {
 
@@ -12,6 +15,8 @@ public class Message implements IMessage, Serializable {
 	private PlayerActions playerActions;
 	private ColorType colorType;
 	private int numberValue;
+	private List<Card> cardList;
+	private boolean cardPlayedCorrectly;
 
 	public Message(MessageType messageType) {
 		this.messageType = messageType;
@@ -57,6 +62,27 @@ public class Message implements IMessage, Serializable {
 		this.numberValue = numberValue;
 	}
 
+	public Message(MessageType messageType, ColorType colorType, List<Card> cardList, Player player) {
+		this.messageType = messageType;
+		this.colorType = colorType;
+		this.cardList = cardList;
+		this.player = player;
+	}
+
+	public Message(MessageType messageType, int numberValue, List<Card> cardList, Player player) {
+		this.messageType = messageType;
+		this.numberValue = numberValue;
+		this.cardList = cardList;
+		this.player = player;
+	}
+
+	public Message(MessageType messageType, Player player, Card card, boolean cardPlayedCorrectly) {
+		this.messageType = messageType;
+		this.player = player;
+		this.card = card;
+		this.cardPlayedCorrectly = cardPlayedCorrectly;
+	}
+
 	@Override
 	public Player getPlayer() {
 		return player;
@@ -84,16 +110,23 @@ public class Message implements IMessage, Serializable {
 		return playerActions;
 	}
 
+	@Override
 	public ColorType getColorType() {
 		return colorType;
 	}
 
+	@Override
 	public int getNumberValue() {
 		return numberValue;
 	}
 
+	@Override
+	public List<Card> getCardList() {
+		return cardList;
+	}
+
 	public enum MessageType {
-		START, QUIT, TURNSTART, TURNACTION, NEWCARD, TURNEND, STATUS;
+		START, QUIT, TURNSTART, TURNACTION, NEWCARD, TURNEND, STATUS_COLOR_HINT, STATUS_NUMBER_HINT, STATUS_PLAYED_CARD;
 	}
 
 	public enum PlayerActions {
@@ -121,5 +154,5 @@ public class Message implements IMessage, Serializable {
 
 		}
 	}
-	
+
 }

@@ -37,12 +37,20 @@ public class Card implements Serializable {
 		return position;
 	}
 
+	public void setPosition(int position) {
+		this.position = position;
+	}
+
 	public ColorType getColor() {
 		return color;
 	}
 
 	public int getNumberValue() {
 		return numberValue;
+	}
+
+	public String toString() {
+		return Integer.toString(this.getPosition());
 	}
 
 }
