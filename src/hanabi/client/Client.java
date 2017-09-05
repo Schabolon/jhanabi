@@ -19,7 +19,7 @@ import hanabi.Player;
 public class Client implements IClient {
 
 	private String hostName;
-	private int port;
+	private int port = 1024;
 
 	private Socket socket;
 	private ObjectOutputStream objectOutputStream;
@@ -49,7 +49,10 @@ public class Client implements IClient {
 		System.out.println("Please enter the server ip adress you want to connect to:");
 		hostName = getUserInput();
 		System.out.println("Please enter the server port: (default: 1024)");
-		port = Integer.parseInt(getUserInput());
+		String userPortInput = getUserInput();
+		if (!userPortInput.isEmpty()) {
+			port = Integer.parseInt(userPortInput);
+		}
 		System.out.println("Trying to connect to the server " + hostName + ":" + port);
 	}
 
