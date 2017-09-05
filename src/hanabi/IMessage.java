@@ -22,7 +22,11 @@ public interface IMessage {
 	public int getNumberValue();
 
 	public boolean isCardPlayedCorrectly();
-	
+
 	public int getScore();
+
+	public int getNoteCount();
+
+	public int getStormCount();
 
 }

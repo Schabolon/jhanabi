@@ -134,6 +134,9 @@ public class Client implements IClient {
 			System.out.println("The game ended!");
 			System.out.println("You a achieved a score of " + msg.getScore());
 			break;
+		case STATUS_NOTE_STORM_COUNT:
+			System.out.println("Storm count: " + msg.getStormCount() + ", " + " note count: " + msg.getNoteCount());
+			break;
 		case TURNACTION:
 			System.out.println("Wrong MessageType");
 			break;

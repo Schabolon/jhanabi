@@ -190,24 +190,40 @@ public class GameServer implements IServer {
 			sendAllExcept(msg, player);
 		}
 		sendCardInformation();
+		sendNoteAndStormTokenCount();
 		nextPlayersTurn();
+	}
+
+	private boolean canPlayerGiveHint() {
+		if (gameStats.getNoteCount() <= 0) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	private void colorHintHandler(int playerNumber, ColorType color) {
-		Player playerTheHintIsGivenTo = players.get(playerNumber);
-		List<Card> cardsWithGivenColor = playerTheHintIsGivenTo.getCardsByColor(color);
-		Message msg = new Message(MessageType.STATUS_COLOR_HINT, color, cardsWithGivenColor, playerTheHintIsGivenTo);
-		sendAll(msg);
-		nextPlayersTurn();
+		if (canPlayerGiveHint()) {
+			Player playerTheHintIsGivenTo = players.get(playerNumber);
+			List<Card> cardsWithGivenColor = playerTheHintIsGivenTo.getCardsByColor(color);
+			Message msg = new Message(MessageType.STATUS_COLOR_HINT, color, cardsWithGivenColor,
+					playerTheHintIsGivenTo);
+			sendAll(msg);
+			sendNoteAndStormTokenCount();
+			nextPlayersTurn();
+		}
 	}
 
 	private void numberHintHandler(int playerNumber, int numberValue) {
-		Player playerTheHintIsGivenTo = players.get(playerNumber);
-		List<Card> cardsWithGivenNumberValue = playerTheHintIsGivenTo.getCardsByNumberValue(numberValue);
-		Message msg = new Message(MessageType.STATUS_NUMBER_HINT, numberValue, cardsWithGivenNumberValue,
-				playerTheHintIsGivenTo);
-		sendAll(msg);
-		nextPlayersTurn();
+		if (canPlayerGiveHint()) {
+			Player playerTheHintIsGivenTo = players.get(playerNumber);
+			List<Card> cardsWithGivenNumberValue = playerTheHintIsGivenTo.getCardsByNumberValue(numberValue);
+			Message msg = new Message(MessageType.STATUS_NUMBER_HINT, numberValue, cardsWithGivenNumberValue,
+					playerTheHintIsGivenTo);
+			sendAll(msg);
+			sendNoteAndStormTokenCount();
+			nextPlayersTurn();
+		}
 	}
 
 	private void playCardHandler(Player player, int cardPosition) {
@@ -222,7 +238,14 @@ public class GameServer implements IServer {
 		}
 		player.handoutNewCard(gameStats.drawCardFromDeck());
 		sendCardInformation();
+		sendNoteAndStormTokenCount();
 		nextPlayersTurn();
+	}
+
+	private void sendNoteAndStormTokenCount() {
+		Message msg = new Message(MessageType.STATUS_NOTE_STORM_COUNT, gameStats.getStormCount(),
+				gameStats.getNoteCount());
+		sendAll(msg);
 	}
 
 	private void nextPlayersTurn() {
