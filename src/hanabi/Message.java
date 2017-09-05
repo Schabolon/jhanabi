@@ -20,6 +20,7 @@ public class Message implements IMessage, Serializable {
 	private int noteCount;
 	private Board board;
 	private int deckCount;
+	private List<String> playerNames;
 
 	public Message(MessageType messageType) {
 		this.messageType = messageType;
@@ -86,8 +87,8 @@ public class Message implements IMessage, Serializable {
 		this.cardPlayedCorrectly = cardPlayedCorrectly;
 	}
 
-	public Message(MessageType messageType, int score) {
-		this.messageType = messageType;
+	public Message(int score) {
+		this.messageType = MessageType.STATUS_GAME_END;
 		this.score = score;
 	}
 
@@ -111,6 +112,16 @@ public class Message implements IMessage, Serializable {
 	public Message(MessageType messageType, Board board) {
 		this.messageType = messageType;
 		this.board = board;
+	}
+
+	public Message(MessageType messageType, int deckCount) {
+		this.messageType = messageType;
+		this.deckCount = deckCount;
+	}
+
+	public Message(List<String> playerNames) {
+		this.messageType = MessageType.STATUS_PLAYER_NAMES;
+		this.playerNames = playerNames;
 	}
 
 	@Override
@@ -191,9 +202,14 @@ public class Message implements IMessage, Serializable {
 	public int getDeckCount() {
 		return deckCount;
 	}
+	
+	@Override
+	public List<String> getPlayerNames() {
+		return playerNames;
+	}
 
 	public enum MessageType {
-		START, QUIT, TURNSTART, TURNACTION, NEWCARD, TURNEND, STATUS_COLOR_HINT, STATUS_NUMBER_HINT, STATUS_PLAYED_CARD, STATUS_GAME_END, STATUS_PLAYER_CARDS, STATUS_HINT_STORM_COUNT, STATUS_DISCARDED_CARD, STATUS_BOARD_INFORMATION;
+		START, QUIT, TURNSTART, TURNACTION, NEWCARD, TURNEND, STATUS_COLOR_HINT, STATUS_NUMBER_HINT, STATUS_PLAYED_CARD, STATUS_GAME_END, STATUS_PLAYER_CARDS, STATUS_HINT_STORM_COUNT, STATUS_DISCARDED_CARD, STATUS_BOARD_INFORMATION, STATUS_CARDS_LEFT_IN_DECK, STATUS_PLAYER_NAMES, TURNACTION_NOT_POSSIBLE;
 	}
 
 	public enum PlayerActions {
@@ -201,7 +217,7 @@ public class Message implements IMessage, Serializable {
 	}
 
 	public enum ColorType {
-		RED, YELLOW, GREEN, BLUE, WHITE;
+		RED, YELLOW, GREEN, BLUE, WHITE, UNKNOWN;
 
 		public static ColorType getColorFromString(String color) {
 			switch (color.toLowerCase()) {
@@ -216,7 +232,7 @@ public class Message implements IMessage, Serializable {
 			case "white":
 				return WHITE;
 			default:
-				return null;
+				return UNKNOWN;
 			}
 
 		}

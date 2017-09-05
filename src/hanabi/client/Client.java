@@ -27,6 +27,8 @@ public class Client implements IClient {
 
 	private ClientServerListener clientServerListener;
 
+	private List<String> playerNames;
+
 	public Client(String hostName, int port) {
 		this.hostName = hostName;
 		this.port = port;
@@ -143,6 +145,12 @@ public class Client implements IClient {
 			System.out.println("RED:" + board.getRedCards() + " YELLOW:" + board.getYellowCards() + " GREEN:"
 					+ board.getGreenCards() + " BLUE:" + board.getBlueCards() + " WHITE:" + board.getWhiteCards());
 			break;
+		case STATUS_CARDS_LEFT_IN_DECK:
+			System.out.println("Cards left in deck: " + msg.getDeckCount());
+			break;
+		case STATUS_PLAYER_NAMES:
+			playerNames = msg.getPlayerNames();
+			break;
 		case TURNACTION:
 			System.out.println("Wrong MessageType");
 			break;
@@ -150,6 +158,10 @@ public class Client implements IClient {
 			System.out.println("It's the next players turn");
 			break;
 		case TURNSTART:
+			startTurn();
+			break;
+		case TURNACTION_NOT_POSSIBLE:
+			System.err.println("Your last action couldn't be performed. Please try again.");
 			startTurn();
 			break;
 		default:
@@ -212,35 +224,71 @@ public class Client implements IClient {
 	private void giveValueHint() {
 		System.out.println("Please choose a number (1-5)");
 		int numberValue = Integer.parseInt(getUserInput());
-		System.out.println("Please choose the player (0-4) you want to give the hint");
-		int playerNumber = Integer.parseInt(getUserInput());
-		Message msg = new Message(MessageType.TURNACTION, new Player(playerNumber), PlayerActions.GIVE_NUMBER_HINT,
-				numberValue);
-		sendMessage(msg);
+		if (isNumberInRange(1, 5, numberValue)) {
+			System.out.println("Please choose the player (0-" + playerNames.size() + ") you want to give the hint");
+			int playerNumber = Integer.parseInt(getUserInput());
+			if (isNumberInRange(0, playerNames.size(), playerNumber)) {
+				Message msg = new Message(MessageType.TURNACTION, new Player(playerNumber),
+						PlayerActions.GIVE_NUMBER_HINT, numberValue);
+				sendMessage(msg);
+			} else {
+				startTurn();
+			}
+		} else {
+			startTurn();
+		}
 	}
 
 	private void giveColorHint() {
 		System.out.println("Please choose a color (red, green, blue, yellow, white)");
-		String color = getUserInput();
-		System.out.println("Please choose the player (0-4) you want to give the hint");
-		int playerNumber = Integer.parseInt(getUserInput());
-		Message msg = new Message(MessageType.TURNACTION, new Player(playerNumber), PlayerActions.GIVE_COLOR_HINT,
-				ColorType.getColorFromString(color));
-		sendMessage(msg);
+		String colorUserInput = getUserInput();
+		ColorType color = ColorType.getColorFromString(colorUserInput);
+		if (isColor(color)) {
+			System.out.println("Please choose the player (0-" + playerNames.size() + ") you want to give the hint");
+			int playerNumber = Integer.parseInt(getUserInput());
+			if (isNumberInRange(0, playerNames.size(), playerNumber)) {
+				Message msg = new Message(MessageType.TURNACTION, new Player(playerNumber),
+						PlayerActions.GIVE_COLOR_HINT, color);
+				sendMessage(msg);
+			} else {
+				startTurn();
+			}
+		} else {
+			startTurn();
+		}
+	}
+
+	private boolean isNumberInRange(int minimum, int maximum, int number) {
+		if (number >= minimum && number <= maximum) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isColor(ColorType color) {
+		return !color.equals(ColorType.UNKNOWN);
 	}
 
 	private void discardCard() {
 		System.out.println("Please choose the position (0-4) of the card you want to discard:");
 		int cardPosition = getCardPositionUserInput();
-		Message msg = new Message(MessageType.TURNACTION, new Card(cardPosition), PlayerActions.DISCARD);
-		sendMessage(msg);
+		if (isNumberInRange(0, 4, cardPosition)) {
+			Message msg = new Message(MessageType.TURNACTION, new Card(cardPosition), PlayerActions.DISCARD);
+			sendMessage(msg);
+		} else {
+			startTurn();
+		}
 	}
 
 	private void playCard() {
 		System.out.println("Please choose the position (0-4) of the card you want to play:");
 		int cardPosition = getCardPositionUserInput();
-		Message msg = new Message(MessageType.TURNACTION, new Card(cardPosition), PlayerActions.PLAY_CARD);
-		sendMessage(msg);
+		if (isNumberInRange(0, 4, cardPosition)) {
+			Message msg = new Message(MessageType.TURNACTION, new Card(cardPosition), PlayerActions.PLAY_CARD);
+			sendMessage(msg);
+		} else {
+			startTurn();
+		}
 	}
 
 	private int getCardPositionUserInput() {

@@ -32,5 +32,7 @@ public interface IMessage {
 	public Board getBoard();
 	
 	public int getDeckCount();
+	
+	public List<String> getPlayerNames();
 
 }

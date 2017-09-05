@@ -144,6 +144,7 @@ public class GameServer implements IServer {
 			playersReady.put(sender, true);
 		}
 		if (allPlayersReady()) {
+			sendAllPlayerNames();
 			sendAll(new Message(MessageType.START));
 			gameStats = new GameStats();
 			gameStats.handOutCardsAtGamestart(players);
@@ -160,6 +161,14 @@ public class GameServer implements IServer {
 			Message msg = new Message(MessageType.STATUS_PLAYER_CARDS, player, player.getCardList());
 			sendAllExcept(msg, player);
 		}
+	}
+
+	private void sendAllPlayerNames() {
+		List<String> playerNames = new ArrayList<>();
+		for (int i = 0; i < players.size(); i++) {
+			playerNames.add(players.get(i).getPlayerName());
+		}
+		sendAll(new Message(playerNames));
 	}
 
 	private void gameActionHandler(ClientThread source, Message msg) {
@@ -189,9 +198,12 @@ public class GameServer implements IServer {
 			Message discardMessage = new Message(MessageType.STATUS_DISCARDED_CARD, player, card);
 			sendAll(discardMessage);
 			player.handoutNewCard(gameStats.drawCardFromDeck());
+			sendCardsLeftInDeckStatus();
 			gameStats.increaseNotesByOne();
 			Message msg = new Message(MessageType.NEWCARD, player, card);
 			sendAllExcept(msg, player);
+		} else {
+			sendMessage(playersByClientThread.get(player), new Message(MessageType.TURNACTION_NOT_POSSIBLE));
 		}
 		sendCardInformation();
 		sendNoteAndStormTokenCount();
@@ -216,6 +228,9 @@ public class GameServer implements IServer {
 			sendAll(msg);
 			sendNoteAndStormTokenCount();
 			nextPlayersTurn();
+		} else {
+			sendMessage(playersByClientThread.get(players.get(currentPlayerNumber)),
+					new Message(MessageType.TURNACTION_NOT_POSSIBLE));
 		}
 	}
 
@@ -229,6 +244,9 @@ public class GameServer implements IServer {
 			sendAll(msg);
 			sendNoteAndStormTokenCount();
 			nextPlayersTurn();
+		} else {
+			sendMessage(playersByClientThread.get(players.get(currentPlayerNumber)),
+					new Message(MessageType.TURNACTION_NOT_POSSIBLE));
 		}
 	}
 
@@ -245,6 +263,7 @@ public class GameServer implements IServer {
 		}
 		player.removeCard(cardPosition);
 		player.handoutNewCard(gameStats.drawCardFromDeck());
+		sendCardsLeftInDeckStatus();
 		sendCardInformation();
 		sendNoteAndStormTokenCount();
 		nextPlayersTurn();
@@ -259,7 +278,7 @@ public class GameServer implements IServer {
 	private void nextPlayersTurn() {
 		if (isGameEnd()) {
 			int score = getGameScore();
-			Message msg = new Message(MessageType.STATUS_GAME_END, score);
+			Message msg = new Message(score);
 			sendAll(msg);
 		} else {
 			sendBoardStatus();
@@ -300,6 +319,10 @@ public class GameServer implements IServer {
 
 	private void sendBoardStatus() {
 		sendAll(new Message(MessageType.STATUS_BOARD_INFORMATION, gameStats.getBoard()));
+	}
+
+	private void sendCardsLeftInDeckStatus() {
+		sendAll(new Message(MessageType.STATUS_CARDS_LEFT_IN_DECK, gameStats.getCarddeck().size()));
 	}
 
 	private void endCurrentPlayersTurn() {
