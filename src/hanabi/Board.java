@@ -1,8 +1,12 @@
 package hanabi;
 
+import java.io.Serializable;
+
 import hanabi.Message.ColorType;
 
-public class Board {
+public class Board implements Serializable {
+
+	private static final long serialVersionUID = -9007243603738108878L;
 
 	int redCards;
 	int yellowCards;
