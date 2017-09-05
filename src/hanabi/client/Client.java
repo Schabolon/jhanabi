@@ -124,7 +124,7 @@ public class Client implements IClient {
 			List<Card> playersCards = msg.getCardList();
 			for (int i = 0; i < playersCards.size(); i++) {
 				Card card = playersCards.get(i);
-				System.out.println("Value: " + card.getNumberValue() + " and color: " + card.getColor());
+				System.out.println(card.getColor() + " " + card.getNumberValue());
 			}
 			System.out.println(" ");
 			break;
