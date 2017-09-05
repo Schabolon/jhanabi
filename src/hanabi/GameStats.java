@@ -85,11 +85,15 @@ public class GameStats {
 	}
 
 	public void decreaseHintsByOne() {
-		hintCount--;
+		if (hintCount > 0) {
+			hintCount--;
+		}
 	}
 
 	public void increaseHintsByOne() {
-		hintCount++;
+		if (hintCount < 8) {
+			hintCount++;
+		}
 	}
 
 	public int getHintCount() {
