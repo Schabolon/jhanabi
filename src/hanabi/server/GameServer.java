@@ -165,7 +165,7 @@ public class GameServer implements IServer {
 		PlayerActions playerActions = msg.getPlayerActions();
 		switch (playerActions) {
 		case DISCARD:
-			discardHandler(source.getPlayer(), msg.getCard());
+			discardHandler(source.getPlayer(), msg.getCard().getPosition());
 			break;
 		case GIVE_COLOR_HINT:
 			colorHintHandler(msg.getPlayer().getPlayerNumber(), msg.getColorType());
@@ -181,7 +181,8 @@ public class GameServer implements IServer {
 		}
 	}
 
-	private void discardHandler(Player player, Card card) {
+	private void discardHandler(Player player, int cardPosition) {
+		Card card = player.getCardList().get(cardPosition);
 		if (gameStats.canPlayerDiscard()) {
 			player.removeCard(card.getPosition());
 			player.handoutNewCard(gameStats.drawCardFromDeck());
@@ -238,6 +239,7 @@ public class GameServer implements IServer {
 			Message msg = new Message(MessageType.STATUS_PLAYED_CARD, player, card, false);
 			sendAll(msg);
 		}
+		player.removeCard(cardPosition);
 		player.handoutNewCard(gameStats.drawCardFromDeck());
 		sendCardInformation();
 		sendNoteAndStormTokenCount();

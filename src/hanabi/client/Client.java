@@ -96,7 +96,6 @@ public class Client implements IClient {
 			System.out.println("The Game is starting.");
 			break;
 		case NEWCARD:
-			System.out.println("Updating game information:");
 			System.out.println("The " + msg.getPlayer().getPlayerName() + " has drawn a new Card with the values color "
 					+ msg.getCard().getColor() + " and the number value " + msg.getCard().getNumberValue());
 			break;
@@ -105,23 +104,19 @@ public class Client implements IClient {
 			this.disconnect();
 			break;
 		case STATUS_COLOR_HINT:
-			System.out.println("Updating game information:");
 			System.out.println("The " + msg.getPlayer().getPlayerName() + " has " + msg.getColorType()
 					+ " cards at the positions " + msg.getCardList().toString());
 			break;
 		case STATUS_NUMBER_HINT:
-			System.out.println("Updating game information");
 			System.out.println("The " + msg.getPlayer().getPlayerName() + " has cards with the value '"
 					+ msg.getNumberValue() + "' at the positions " + msg.getCardList().toString());
 			break;
 		case STATUS_PLAYED_CARD:
-			System.out.println("Updating game information");
 			System.out.println("The " + msg.getPlayer().getPlayerName() + " played the card with the value '"
 					+ msg.getCard().getNumberValue() + "' and the color " + msg.getCard().getColor() + " and it was "
 					+ msg.isCardPlayedCorrectly());
 			break;
 		case STATUS_PLAYER_CARDS:
-			System.out.println("Updating game information");
 			System.out.println("The " + msg.getPlayer().getPlayerName() + " has the following cards:");
 			List<Card> playersCards = msg.getCardList();
 			for (int i = 0; i < playersCards.size(); i++) {
@@ -153,7 +148,7 @@ public class Client implements IClient {
 	}
 
 	private void startTurn() {
-		System.out.println("Its your turn!");
+		System.out.println("It's your turn!");
 		System.out.println("Please choose one of the following options:");
 		System.out.println("A: Give a hint");
 		System.out.println("B: Discard a card");
