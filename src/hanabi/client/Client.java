@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.List;
 
 import hanabi.Card;
 import hanabi.IMessage;
@@ -118,6 +119,16 @@ public class Client implements IClient {
 			System.out.println("The " + msg.getPlayer().getPlayerName() + " played the card with the value '"
 					+ msg.getCard().getNumberValue() + "' and the color " + msg.getCard().getColor() + " and it was "
 					+ msg.isCardPlayedCorrectly());
+			break;
+		case STATUS_PLAYER_CARDS:
+			System.out.println("Updating game information");
+			System.out.println("The " + msg.getPlayer().getPlayerName() + " has the following cards:");
+			List<Card> playersCards = msg.getCardList();
+			for (int i = 0; i < playersCards.size(); i++) {
+				Card card = playersCards.get(i);
+				System.out.println("Card position: " + card.getPosition() + ", value: " + card.getNumberValue()
+						+ " and color: " + card.getColor());
+			}
 			break;
 		case STATUS_GAME_END:
 			System.out.println("The game ended!");

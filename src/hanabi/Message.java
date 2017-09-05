@@ -87,6 +87,17 @@ public class Message implements IMessage, Serializable {
 		this.score = score;
 	}
 
+	public Message(MessageType messageType, List<Card> cardList) {
+		this.messageType = messageType;
+		this.cardList = cardList;
+	}
+
+	public Message(MessageType messageType, Player player, List<Card> cardList) {
+		this.messageType = messageType;
+		this.player = player;
+		this.cardList = cardList;
+	}
+
 	@Override
 	public int getScore() {
 		return score;
@@ -148,7 +159,7 @@ public class Message implements IMessage, Serializable {
 	}
 
 	public enum MessageType {
-		START, QUIT, TURNSTART, TURNACTION, NEWCARD, TURNEND, STATUS_COLOR_HINT, STATUS_NUMBER_HINT, STATUS_PLAYED_CARD, STATUS_GAME_END;
+		START, QUIT, TURNSTART, TURNACTION, NEWCARD, TURNEND, STATUS_COLOR_HINT, STATUS_NUMBER_HINT, STATUS_PLAYED_CARD, STATUS_GAME_END, STATUS_PLAYER_CARDS;
 	}
 
 	public enum PlayerActions {

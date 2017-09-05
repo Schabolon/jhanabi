@@ -146,9 +146,18 @@ public class GameServer implements IServer {
 			sendAll(new Message(MessageType.START));
 			gameStats = new GameStats();
 			gameStats.handOutCardsAtGamestart(players);
+			sendCardInformation();
 			Message turnStarMessage = new Message(MessageType.TURNSTART);
 			currentPlayerNumber = 0;
 			sendMessage(playersByClientThread.get(players.get(currentPlayerNumber)), turnStarMessage);
+		}
+	}
+
+	private void sendCardInformation() {
+		for (int i = 0; i < players.size(); i++) {
+			Player player = players.get(i);
+			Message msg = new Message(MessageType.STATUS_PLAYER_CARDS, player, player.getCardList());
+			sendAllExcept(msg, player);
 		}
 	}
 
@@ -180,6 +189,7 @@ public class GameServer implements IServer {
 			Message msg = new Message(MessageType.NEWCARD, player, card);
 			sendAllExcept(msg, player);
 		}
+		sendCardInformation();
 		nextPlayersTurn();
 	}
 
@@ -210,18 +220,20 @@ public class GameServer implements IServer {
 			Message msg = new Message(MessageType.STATUS_PLAYED_CARD, player, card, false);
 			sendAll(msg);
 		}
+		player.handoutNewCard(gameStats.drawCardFromDeck());
+		sendCardInformation();
 		nextPlayersTurn();
 	}
 
 	private void nextPlayersTurn() {
 		if (isGameEnd()) {
-			endCurrentPlayersTurn();
-			currentPlayerNumber = getNextPlayersNumber();
-			startCurrentPlayersTurn();
-		} else {
 			int score = getGameScore();
 			Message msg = new Message(MessageType.STATUS_GAME_END, score);
 			sendAll(msg);
+		} else {
+			endCurrentPlayersTurn();
+			currentPlayerNumber = getNextPlayersNumber();
+			startCurrentPlayersTurn();
 		}
 	}
 
