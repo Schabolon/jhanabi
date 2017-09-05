@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.List;
 
 import hanabi.Card;
 import hanabi.IMessage;
@@ -31,12 +30,48 @@ public class Client implements IClient {
 		this.port = port;
 	}
 
+	public Client() {
+
+	}
+
 	public static void main(String[] args) {
-		Client client = new Client("localhost", 1024);
+		Client client = new Client();
+		client.instructions();
 		client.connect();
 		client.listenToServer();
-		client.sendMessage(new Message(MessageType.START));
-		// client.sendMessage(new Message(MessageType.QUIT));
+		client.connectedToServerWaitingForUserinput();
+	}
+
+	private void instructions() {
+		System.out.println("Welcome to Hanabi a coop card game");
+		System.out.println("Please enter the server ip adress you want to connect to:");
+		hostName = getUserInput();
+		System.out.println("Please enter the server port: (default: 1024)");
+		port = Integer.parseInt(getUserInput());
+		System.out.println("Trying to connect to the server " + hostName + ":" + port);
+	}
+
+	private void connectedToServerWaitingForUserinput() {
+		System.out.println("You connected succesfully to the Hanabi server.");
+		System.out.println(
+				"As soon as all players have typed 'start' and submited it to the server the game is going to start");
+		clientCommands();
+	}
+
+	private void clientCommands() {
+		String userInput = getUserInput().toLowerCase();
+		switch (userInput) {
+		case "start":
+			sendMessage(new Message(MessageType.START));
+			break;
+		case "quit":
+			sendMessage(new Message(MessageType.QUIT));
+			break;
+		default:
+			System.out.println("Unknown command.");
+			clientCommands();
+			break;
+		}
 	}
 
 	@Override
@@ -59,6 +94,7 @@ public class Client implements IClient {
 			System.out.println("The Game is starting.");
 			break;
 		case NEWCARD:
+			System.out.println("Updating game information:");
 			System.out.println("The " + msg.getPlayer().getPlayerName() + " has drawn a new Card with the values color "
 					+ msg.getCard().getColor() + " and the number value " + msg.getCard().getNumberValue());
 			break;
@@ -75,6 +111,12 @@ public class Client implements IClient {
 			System.out.println("Updating game information");
 			System.out.println("The " + msg.getPlayer().getPlayerName() + " has cards with the value '"
 					+ msg.getNumberValue() + "' at the positions " + msg.getCardList().toString());
+			break;
+		case STATUS_PLAYED_CARD:
+			System.out.println("Updating game information");
+			System.out.println("The " + msg.getPlayer().getPlayerName() + " played the card with the value '"
+					+ msg.getCard().getNumberValue() + "' and the color " + msg.getCard().getColor() + " and it was "
+					+ msg.isCardPlayedCorrectly());
 			break;
 		case TURNACTION:
 			System.out.println("Wrong MessageType");
@@ -145,7 +187,7 @@ public class Client implements IClient {
 	private void giveValueHint() {
 		System.out.println("Please choose a number (1-5)");
 		int numberValue = Integer.parseInt(getUserInput());
-		System.out.println("Please choose the player (1-5) you want to give the hint");
+		System.out.println("Please choose the player (0-4) you want to give the hint");
 		int playerNumber = Integer.parseInt(getUserInput());
 		Message msg = new Message(MessageType.TURNACTION, new Player(playerNumber), PlayerActions.GIVE_NUMBER_HINT,
 				numberValue);
@@ -155,7 +197,7 @@ public class Client implements IClient {
 	private void giveColorHint() {
 		System.out.println("Please choose a color (red, green, blue, yellow)");
 		String color = getUserInput();
-		System.out.println("Please choose the player (1-4) you want to give the hint");
+		System.out.println("Please choose the player (0-4) you want to give the hint");
 		int playerNumber = Integer.parseInt(getUserInput());
 		Message msg = new Message(MessageType.TURNACTION, new Player(playerNumber), PlayerActions.GIVE_COLOR_HINT,
 				ColorType.getColorFromString(color));
@@ -163,14 +205,14 @@ public class Client implements IClient {
 	}
 
 	private void discardCard() {
-		System.out.println("Please choose the position (1-5) of the card you want to discard:");
+		System.out.println("Please choose the position (0-4) of the card you want to discard:");
 		int cardPosition = getCardPositionUserInput();
 		Message msg = new Message(MessageType.TURNACTION, new Card(cardPosition), PlayerActions.DISCARD);
 		sendMessage(msg);
 	}
 
 	private void playCard() {
-		System.out.println("Please choose the position (1-5) of the card you want to play:");
+		System.out.println("Please choose the position (0-4) of the card you want to play:");
 		int cardPosition = getCardPositionUserInput();
 		Message msg = new Message(MessageType.TURNACTION, new Card(cardPosition), PlayerActions.PLAY_CARD);
 		sendMessage(msg);

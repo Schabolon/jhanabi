@@ -17,6 +17,7 @@ public class GameStats {
 	public GameStats() {
 		createCarddeck();
 		shuffle();
+		board = new Board(0, 0, 0, 0, 0);
 	}
 
 	private void createCarddeck() {

@@ -3,8 +3,6 @@ package hanabi;
 import java.io.Serializable;
 import java.util.List;
 
-import hanabi.Message.MessageType;
-
 public class Message implements IMessage, Serializable {
 
 	private static final long serialVersionUID = 4279125854700749725L;
@@ -123,6 +121,11 @@ public class Message implements IMessage, Serializable {
 	@Override
 	public List<Card> getCardList() {
 		return cardList;
+	}
+
+	@Override
+	public boolean isCardPlayedCorrectly() {
+		return cardPlayedCorrectly;
 	}
 
 	public enum MessageType {

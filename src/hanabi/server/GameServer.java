@@ -165,7 +165,7 @@ public class GameServer implements IServer {
 			numberHintHandler(msg.getPlayer().getPlayerNumber(), msg.getNumberValue());
 			break;
 		case PLAY_CARD:
-			playCardHandler(source.getPlayer(), msg.getCard());
+			playCardHandler(source.getPlayer(), msg.getCard().getPosition());
 			break;
 		default:
 			break;
@@ -180,6 +180,7 @@ public class GameServer implements IServer {
 			Message msg = new Message(MessageType.NEWCARD, player, card);
 			sendAllExcept(msg, player);
 		}
+		nextPlayersTurn();
 	}
 
 	private void colorHintHandler(int playerNumber, ColorType color) {
@@ -196,15 +197,20 @@ public class GameServer implements IServer {
 		Message msg = new Message(MessageType.STATUS_NUMBER_HINT, numberValue, cardsWithGivenNumberValue,
 				playerTheHintIsGivenTo);
 		sendAll(msg);
+		nextPlayersTurn();
 	}
 
-	private void playCardHandler(Player player, Card card) {
+	private void playCardHandler(Player player, int cardPosition) {
+		Card card = player.getCardList().get(cardPosition);
 		if (gameStats.getBoard().playedCardCorrectly(card)) {
 			Message msg = new Message(MessageType.STATUS_PLAYED_CARD, player, card, true);
 			sendAll(msg);
 		} else {
 			gameStats.increaseStormCountByOne();
+			Message msg = new Message(MessageType.STATUS_PLAYED_CARD, player, card, false);
+			sendAll(msg);
 		}
+		nextPlayersTurn();
 	}
 
 	private void nextPlayersTurn() {
