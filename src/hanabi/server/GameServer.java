@@ -206,6 +206,7 @@ public class GameServer implements IServer {
 		if (canPlayerGiveHint()) {
 			Player playerTheHintIsGivenTo = players.get(playerNumber);
 			List<Card> cardsWithGivenColor = playerTheHintIsGivenTo.getCardsByColor(color);
+			gameStats.increaseNotesByOne();
 			Message msg = new Message(MessageType.STATUS_COLOR_HINT, color, cardsWithGivenColor,
 					playerTheHintIsGivenTo);
 			sendAll(msg);
@@ -218,6 +219,7 @@ public class GameServer implements IServer {
 		if (canPlayerGiveHint()) {
 			Player playerTheHintIsGivenTo = players.get(playerNumber);
 			List<Card> cardsWithGivenNumberValue = playerTheHintIsGivenTo.getCardsByNumberValue(numberValue);
+			gameStats.increaseNotesByOne();
 			Message msg = new Message(MessageType.STATUS_NUMBER_HINT, numberValue, cardsWithGivenNumberValue,
 					playerTheHintIsGivenTo);
 			sendAll(msg);
