@@ -199,7 +199,7 @@ public class GameServer implements IServer {
 			sendAll(discardMessage);
 			player.handoutNewCard(gameStats.drawCardFromDeck());
 			sendCardsLeftInDeckStatus();
-			gameStats.increaseNotesByOne();
+			gameStats.increaseHintsByOne();
 			Message msg = new Message(MessageType.NEWCARD, player, card);
 			sendAllExcept(msg, player);
 		} else {
@@ -211,7 +211,7 @@ public class GameServer implements IServer {
 	}
 
 	private boolean canPlayerGiveHint() {
-		if (gameStats.getNoteCount() <= 0) {
+		if (gameStats.getHintCount() <= 0) {
 			return false;
 		} else {
 			return true;
@@ -222,7 +222,7 @@ public class GameServer implements IServer {
 		if (canPlayerGiveHint()) {
 			Player playerTheHintIsGivenTo = players.get(playerNumber);
 			List<Card> cardsWithGivenColor = playerTheHintIsGivenTo.getCardsByColor(color);
-			gameStats.decreaseNotesByOne();
+			gameStats.decreaseHintsByOne();
 			Message msg = new Message(MessageType.STATUS_COLOR_HINT, color, cardsWithGivenColor,
 					playerTheHintIsGivenTo);
 			sendAll(msg);
@@ -238,7 +238,7 @@ public class GameServer implements IServer {
 		if (canPlayerGiveHint()) {
 			Player playerTheHintIsGivenTo = players.get(playerNumber);
 			List<Card> cardsWithGivenNumberValue = playerTheHintIsGivenTo.getCardsByNumberValue(numberValue);
-			gameStats.decreaseNotesByOne();
+			gameStats.decreaseHintsByOne();
 			Message msg = new Message(MessageType.STATUS_NUMBER_HINT, numberValue, cardsWithGivenNumberValue,
 					playerTheHintIsGivenTo);
 			sendAll(msg);
@@ -253,7 +253,7 @@ public class GameServer implements IServer {
 	private void playCardHandler(int playerNumber, int cardPosition) {
 		Player player = players.get(playerNumber);
 		Card card = player.getCardList().get(cardPosition);
-		if (gameStats.getBoard().playedCardCorrectly(card)) {
+		if (gameStats.getBoard().playedCardCorrectly(card, gameStats)) {
 			Message msg = new Message(MessageType.STATUS_PLAYED_CARD, player, card, true);
 			sendAll(msg);
 		} else {
@@ -271,7 +271,7 @@ public class GameServer implements IServer {
 
 	private void sendNoteAndStormTokenCount() {
 		Message msg = new Message(MessageType.STATUS_HINT_STORM_COUNT, gameStats.getStormCount(),
-				gameStats.getNoteCount());
+				gameStats.getHintCount());
 		sendAll(msg);
 	}
 

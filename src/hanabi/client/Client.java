@@ -62,7 +62,7 @@ public class Client implements IClient {
 	private void connectedToServerWaitingForUserinput() {
 		System.out.println("You connected succesfully to the Hanabi server.");
 		System.out.println(
-				"As soon as all players have typed 'start' and submited it to the server the game is going to start");
+				"As soon as all players have typed 'start' and submitted it to the server the game is going to start");
 		clientCommands();
 	}
 
@@ -134,7 +134,6 @@ public class Client implements IClient {
 			break;
 		case STATUS_HINT_STORM_COUNT:
 			System.out.println("Storm count: " + msg.getStormCount() + ", " + " Hint count: " + msg.getHintCount());
-			System.out.println("------------------------------------------------------------");
 			break;
 		case STATUS_DISCARDED_CARD:
 			System.out.println("The " + msg.getPlayer().getPlayerName() + " discarded the card with the value '"
@@ -144,6 +143,7 @@ public class Client implements IClient {
 			Board board = msg.getBoard();
 			System.out.println("RED:" + board.getRedCards() + " YELLOW:" + board.getYellowCards() + " GREEN:"
 					+ board.getGreenCards() + " BLUE:" + board.getBlueCards() + " WHITE:" + board.getWhiteCards());
+			System.out.println("------------------------------------------------------------");
 			break;
 		case STATUS_CARDS_LEFT_IN_DECK:
 			System.out.println("Cards left in deck: " + msg.getDeckCount());
@@ -199,13 +199,18 @@ public class Client implements IClient {
 	}
 
 	private void giveHint() {
-		System.out.println("Please choose which kind of hint you want to give:");
-		System.out.println("A: Value Hint");
-		System.out.println("B: Color Hint");
-		processUserHintKind();
+		int playerNumber = getPlayerFromUserinput();
+		if (isNumberInRange(0, playerNames.size() - 1, playerNumber)) {
+			System.out.println("Please choose which kind of hint you want to give:");
+			System.out.println("A: Value Hint");
+			System.out.println("B: Color Hint");
+			processUserHintKind(playerNumber);
+		} else {
+			startTurn();
+		}
 	}
 
-	private void processUserHintKind() {
+	private void processUserHintKind(int playerNumber) {
 		String userInput = getUserInput();
 		switch (userInput.toLowerCase()) {
 		case "a":
@@ -221,11 +226,19 @@ public class Client implements IClient {
 		}
 	}
 
+	private int getPlayerFromUserinput() {
+		System.out.println("Please choose the player (0-" + (playerNames.size() - 1) + ") you want to give the hint");
+		String userInput = getUserInput();
+		int playerNumber = Integer.parseInt(userInput);
+		return playerNumber;
+	}
+
 	private void giveValueHint() {
 		System.out.println("Please choose a number (1-5)");
 		int numberValue = Integer.parseInt(getUserInput());
 		if (isNumberInRange(1, 5, numberValue)) {
-			System.out.println("Please choose the player (0-" + playerNames.size() + ") you want to give the hint");
+			System.out
+					.println("Please choose the player (0-" + (playerNames.size() - 1) + ") you want to give the hint");
 			int playerNumber = Integer.parseInt(getUserInput());
 			if (isNumberInRange(0, playerNames.size(), playerNumber)) {
 				Message msg = new Message(MessageType.TURNACTION, new Player(playerNumber),

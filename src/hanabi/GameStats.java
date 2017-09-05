@@ -11,7 +11,7 @@ public class GameStats {
 	private List<Card> carddeck = new ArrayList<>();
 	private List<Card> trayStack = new ArrayList<>();
 	private int stormCount = 0;
-	private int noteCount = 8;
+	private int hintCount = 8;
 	private Board board;
 	private int turnsLeft = -1;
 
@@ -84,16 +84,16 @@ public class GameStats {
 		return stormCount;
 	}
 
-	public void decreaseNotesByOne() {
-		noteCount--;
+	public void decreaseHintsByOne() {
+		hintCount--;
 	}
 
-	public void increaseNotesByOne() {
-		noteCount++;
+	public void increaseHintsByOne() {
+		hintCount++;
 	}
 
-	public int getNoteCount() {
-		return noteCount;
+	public int getHintCount() {
+		return hintCount;
 	}
 
 	public Board getBoard() {
@@ -101,7 +101,7 @@ public class GameStats {
 	}
 
 	public boolean canPlayerDiscard() {
-		if (noteCount == 8) {
+		if (hintCount == 8) {
 			return false;
 		}
 		return true;
