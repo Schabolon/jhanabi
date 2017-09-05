@@ -199,7 +199,7 @@ public class Client implements IClient {
 	}
 
 	private void giveHint() {
-		int playerNumber = getPlayerFromUserinput();
+		int playerNumber = getPlayerFromUserInput();
 		if (isNumberInRange(0, playerNames.size() - 1, playerNumber)) {
 			System.out.println("Please choose which kind of hint you want to give:");
 			System.out.println("A: Value Hint");
@@ -214,10 +214,10 @@ public class Client implements IClient {
 		String userInput = getUserInput();
 		switch (userInput.toLowerCase()) {
 		case "a":
-			giveValueHint();
+			giveValueHint(playerNumber);
 			break;
 		case "b":
-			giveColorHint();
+			giveColorHint(playerNumber);
 			break;
 		default:
 			System.out.println("Wrong Input");
@@ -226,46 +226,33 @@ public class Client implements IClient {
 		}
 	}
 
-	private int getPlayerFromUserinput() {
+	private int getPlayerFromUserInput() {
 		System.out.println("Please choose the player (0-" + (playerNames.size() - 1) + ") you want to give the hint");
 		String userInput = getUserInput();
 		int playerNumber = Integer.parseInt(userInput);
 		return playerNumber;
 	}
 
-	private void giveValueHint() {
+	private void giveValueHint(int playerNumber) {
 		System.out.println("Please choose a number (1-5)");
 		int numberValue = Integer.parseInt(getUserInput());
 		if (isNumberInRange(1, 5, numberValue)) {
-			System.out
-					.println("Please choose the player (0-" + (playerNames.size() - 1) + ") you want to give the hint");
-			int playerNumber = Integer.parseInt(getUserInput());
-			if (isNumberInRange(0, playerNames.size(), playerNumber)) {
-				Message msg = new Message(MessageType.TURNACTION, new Player(playerNumber),
-						PlayerActions.GIVE_NUMBER_HINT, numberValue);
-				sendMessage(msg);
-			} else {
-				startTurn();
-			}
+			Message msg = new Message(MessageType.TURNACTION, new Player(playerNumber), PlayerActions.GIVE_NUMBER_HINT,
+					numberValue);
+			sendMessage(msg);
 		} else {
 			startTurn();
 		}
 	}
 
-	private void giveColorHint() {
+	private void giveColorHint(int playerNumber) {
 		System.out.println("Please choose a color (red, green, blue, yellow, white)");
 		String colorUserInput = getUserInput();
 		ColorType color = ColorType.getColorFromString(colorUserInput);
 		if (isColor(color)) {
-			System.out.println("Please choose the player (0-" + playerNames.size() + ") you want to give the hint");
-			int playerNumber = Integer.parseInt(getUserInput());
-			if (isNumberInRange(0, playerNames.size(), playerNumber)) {
-				Message msg = new Message(MessageType.TURNACTION, new Player(playerNumber),
-						PlayerActions.GIVE_COLOR_HINT, color);
-				sendMessage(msg);
-			} else {
-				startTurn();
-			}
+			Message msg = new Message(MessageType.TURNACTION, new Player(playerNumber), PlayerActions.GIVE_COLOR_HINT,
+					color);
+			sendMessage(msg);
 		} else {
 			startTurn();
 		}
