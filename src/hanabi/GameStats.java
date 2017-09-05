@@ -13,6 +13,7 @@ public class GameStats {
 	private int stormCount = 0;
 	private int noteCount = 8;
 	private Board board;
+	private int turnsLeft = -1;
 
 	public GameStats() {
 		createCarddeck();
@@ -104,6 +105,14 @@ public class GameStats {
 			return false;
 		}
 		return true;
+	}
+
+	public int getTurnsLeft() {
+		return turnsLeft;
+	}
+
+	public void setTurnsLeft(int turnsLeft) {
+		this.turnsLeft = turnsLeft;
 	}
 
 }

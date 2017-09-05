@@ -15,6 +15,7 @@ public class Message implements IMessage, Serializable {
 	private int numberValue;
 	private List<Card> cardList;
 	private boolean cardPlayedCorrectly;
+	private int score;
 
 	public Message(MessageType messageType) {
 		this.messageType = messageType;
@@ -81,6 +82,24 @@ public class Message implements IMessage, Serializable {
 		this.cardPlayedCorrectly = cardPlayedCorrectly;
 	}
 
+	public Message(MessageType messageType, int score) {
+		this.messageType = messageType;
+		this.score = score;
+	}
+
+	@Override
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	public void setMessageType(MessageType messageType) {
+		this.messageType = messageType;
+	}
+
 	@Override
 	public Player getPlayer() {
 		return player;
@@ -129,7 +148,7 @@ public class Message implements IMessage, Serializable {
 	}
 
 	public enum MessageType {
-		START, QUIT, TURNSTART, TURNACTION, NEWCARD, TURNEND, STATUS_COLOR_HINT, STATUS_NUMBER_HINT, STATUS_PLAYED_CARD;
+		START, QUIT, TURNSTART, TURNACTION, NEWCARD, TURNEND, STATUS_COLOR_HINT, STATUS_NUMBER_HINT, STATUS_PLAYED_CARD, STATUS_GAME_END;
 	}
 
 	public enum PlayerActions {

@@ -214,9 +214,44 @@ public class GameServer implements IServer {
 	}
 
 	private void nextPlayersTurn() {
-		endCurrentPlayersTurn();
-		currentPlayerNumber = getNextPlayersNumber();
-		startCurrentPlayersTurn();
+		if (isGameEnd()) {
+			endCurrentPlayersTurn();
+			currentPlayerNumber = getNextPlayersNumber();
+			startCurrentPlayersTurn();
+		} else {
+			int score = getGameScore();
+			Message msg = new Message(MessageType.STATUS_GAME_END, score);
+			sendAll(msg);
+		}
+	}
+
+	private boolean isGameEnd() {
+		boolean isGameOver = false;
+		if (gameStats.getStormCount() >= 3) {
+			return true;
+		} else if (gameStats.getCarddeck().isEmpty() && gameStats.getTurnsLeft() == -1) {
+			gameStats.setTurnsLeft(players.size());
+			return false;
+		}
+		if (gameStats.getTurnsLeft() > 0) {
+			gameStats.setTurnsLeft(gameStats.getTurnsLeft() - 1);
+		} else if (gameStats.getTurnsLeft() == 0) {
+			return true;
+		}
+
+		if (gameStats.getBoard().getAllCardsCount() == 25) {
+			return true;
+		}
+
+		return isGameOver;
+	}
+
+	private int getGameScore() {
+		if (gameStats.getStormCount() >= 3) {
+			return 0;
+		} else {
+			return gameStats.getBoard().getAllCardsCount();
+		}
 	}
 
 	private void endCurrentPlayersTurn() {

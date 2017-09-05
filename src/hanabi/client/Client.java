@@ -31,7 +31,8 @@ public class Client implements IClient {
 	}
 
 	public Client() {
-
+		this.hostName = "localhost";
+		this.port = 1024;
 	}
 
 	public static void main(String[] args) {
@@ -117,6 +118,10 @@ public class Client implements IClient {
 			System.out.println("The " + msg.getPlayer().getPlayerName() + " played the card with the value '"
 					+ msg.getCard().getNumberValue() + "' and the color " + msg.getCard().getColor() + " and it was "
 					+ msg.isCardPlayedCorrectly());
+			break;
+		case STATUS_GAME_END:
+			System.out.println("The game ended!");
+			System.out.println("You a achieved a score of " + msg.getScore());
 			break;
 		case TURNACTION:
 			System.out.println("Wrong MessageType");

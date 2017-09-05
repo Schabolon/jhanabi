@@ -38,6 +38,10 @@ public class Board {
 		return whiteCards;
 	}
 
+	public int getAllCardsCount() {
+		return redCards + yellowCards + greenCards + blueCards + whiteCards;
+	}
+
 	public boolean playedCardCorrectly(Card card) {
 		ColorType cardColor = card.getColor();
 		int cardNumberValue = card.getNumberValue();
