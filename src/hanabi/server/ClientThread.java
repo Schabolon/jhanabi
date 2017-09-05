@@ -21,7 +21,7 @@ public class ClientThread extends Thread {
 		super("ClientThread " + n);
 		this.game = game;
 		this.socket = socket;
-		player = new Player(n + 1);
+		player = new Player(n);
 	}
 
 	@Override

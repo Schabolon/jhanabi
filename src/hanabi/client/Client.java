@@ -89,7 +89,6 @@ public class Client implements IClient {
 
 	@Override
 	public void readMessage(IMessage msg) {
-		System.out.println("Processing Message");
 		MessageType messageType = msg.getMessageType();
 		switch (messageType) {
 		case START:

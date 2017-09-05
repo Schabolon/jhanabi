@@ -6,7 +6,7 @@ import java.net.Socket;
 
 public class Server {
 	private static final int PORT = 1024;
-	private static int n = -1;
+	private static int n = 0;
 
 	public static void main(String[] args) {
 

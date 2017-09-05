@@ -39,6 +39,7 @@ public class GameServer implements IServer {
 	public void sendMessage(ClientThread receiver, IMessage msg) {
 		try {
 			receiver.getOutputStream().writeObject(msg);
+			receiver.getOutputStream().reset();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -174,7 +175,7 @@ public class GameServer implements IServer {
 			numberHintHandler(msg.getPlayer().getPlayerNumber(), msg.getNumberValue());
 			break;
 		case PLAY_CARD:
-			playCardHandler(source.getPlayer(), msg.getCard().getPosition());
+			playCardHandler(source.getPlayer().getPlayerNumber(), msg.getCard().getPosition());
 			break;
 		default:
 			break;
@@ -229,7 +230,8 @@ public class GameServer implements IServer {
 		}
 	}
 
-	private void playCardHandler(Player player, int cardPosition) {
+	private void playCardHandler(int playerNumber, int cardPosition) {
+		Player player = players.get(playerNumber);
 		Card card = player.getCardList().get(cardPosition);
 		if (gameStats.getBoard().playedCardCorrectly(card)) {
 			Message msg = new Message(MessageType.STATUS_PLAYED_CARD, player, card, true);

@@ -37,6 +37,11 @@ public class ClientServerListener extends Thread {
 			IMessage msg = (IMessage) object;
 			client.readMessage(msg);
 		}
+		try {
+			objectInputStream.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private ObjectInputStream getObjectInputStream() {
