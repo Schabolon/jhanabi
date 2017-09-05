@@ -18,6 +18,8 @@ public class Message implements IMessage, Serializable {
 	private int score;
 	private int stormCount;
 	private int noteCount;
+	private Board board;
+	private int deckCount;
 
 	public Message(MessageType messageType) {
 		this.messageType = messageType;
@@ -106,6 +108,11 @@ public class Message implements IMessage, Serializable {
 		this.noteCount = noteCount;
 	}
 
+	public Message(MessageType messageType, Board board) {
+		this.messageType = messageType;
+		this.board = board;
+	}
+
 	@Override
 	public int getScore() {
 		return score;
@@ -166,7 +173,7 @@ public class Message implements IMessage, Serializable {
 	}
 
 	@Override
-	public int getNoteCount() {
+	public int getHintCount() {
 		return noteCount;
 	}
 
@@ -175,8 +182,18 @@ public class Message implements IMessage, Serializable {
 		return stormCount;
 	}
 
+	@Override
+	public Board getBoard() {
+		return board;
+	}
+
+	@Override
+	public int getDeckCount() {
+		return deckCount;
+	}
+
 	public enum MessageType {
-		START, QUIT, TURNSTART, TURNACTION, NEWCARD, TURNEND, STATUS_COLOR_HINT, STATUS_NUMBER_HINT, STATUS_PLAYED_CARD, STATUS_GAME_END, STATUS_PLAYER_CARDS, STATUS_NOTE_STORM_COUNT, STATUS_DISCARDED_CARD;
+		START, QUIT, TURNSTART, TURNACTION, NEWCARD, TURNEND, STATUS_COLOR_HINT, STATUS_NUMBER_HINT, STATUS_PLAYED_CARD, STATUS_GAME_END, STATUS_PLAYER_CARDS, STATUS_HINT_STORM_COUNT, STATUS_DISCARDED_CARD, STATUS_BOARD_INFORMATION;
 	}
 
 	public enum PlayerActions {

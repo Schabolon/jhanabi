@@ -25,8 +25,12 @@ public interface IMessage {
 
 	public int getScore();
 
-	public int getNoteCount();
+	public int getHintCount();
 
 	public int getStormCount();
+	
+	public Board getBoard();
+	
+	public int getDeckCount();
 
 }

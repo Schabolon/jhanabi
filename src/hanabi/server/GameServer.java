@@ -251,7 +251,7 @@ public class GameServer implements IServer {
 	}
 
 	private void sendNoteAndStormTokenCount() {
-		Message msg = new Message(MessageType.STATUS_NOTE_STORM_COUNT, gameStats.getStormCount(),
+		Message msg = new Message(MessageType.STATUS_HINT_STORM_COUNT, gameStats.getStormCount(),
 				gameStats.getNoteCount());
 		sendAll(msg);
 	}
@@ -262,6 +262,7 @@ public class GameServer implements IServer {
 			Message msg = new Message(MessageType.STATUS_GAME_END, score);
 			sendAll(msg);
 		} else {
+			sendBoardStatus();
 			endCurrentPlayersTurn();
 			currentPlayerNumber = getNextPlayersNumber();
 			startCurrentPlayersTurn();
@@ -295,6 +296,10 @@ public class GameServer implements IServer {
 		} else {
 			return gameStats.getBoard().getAllCardsCount();
 		}
+	}
+
+	private void sendBoardStatus() {
+		sendAll(new Message(MessageType.STATUS_BOARD_INFORMATION, gameStats.getBoard()));
 	}
 
 	private void endCurrentPlayersTurn() {

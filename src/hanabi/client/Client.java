@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.List;
 
+import hanabi.Board;
 import hanabi.Card;
 import hanabi.IMessage;
 import hanabi.Message;
@@ -98,8 +99,6 @@ public class Client implements IClient {
 			System.out.println("The Game is starting.");
 			break;
 		case NEWCARD:
-			System.out.println("The " + msg.getPlayer().getPlayerName() + " has drawn a new Card with the values color "
-					+ msg.getCard().getColor() + " and the number value " + msg.getCard().getNumberValue());
 			break;
 		case QUIT:
 			System.out.println("Stopping the game");
@@ -123,20 +122,26 @@ public class Client implements IClient {
 			List<Card> playersCards = msg.getCardList();
 			for (int i = 0; i < playersCards.size(); i++) {
 				Card card = playersCards.get(i);
-				System.out.println("Card position: " + card.getPosition() + ", value: " + card.getNumberValue()
-						+ " and color: " + card.getColor());
+				System.out.println("Value: " + card.getNumberValue() + " and color: " + card.getColor());
 			}
+			System.out.println(" ");
 			break;
 		case STATUS_GAME_END:
 			System.out.println("The game ended!");
 			System.out.println("You a achieved a score of " + msg.getScore());
 			break;
-		case STATUS_NOTE_STORM_COUNT:
-			System.out.println("Storm count: " + msg.getStormCount() + ", " + " note count: " + msg.getNoteCount());
+		case STATUS_HINT_STORM_COUNT:
+			System.out.println("Storm count: " + msg.getStormCount() + ", " + " Hint count: " + msg.getHintCount());
+			System.out.println("------------------------------------------------------------");
 			break;
 		case STATUS_DISCARDED_CARD:
 			System.out.println("The " + msg.getPlayer().getPlayerName() + " discarded the card with the value '"
-					+ msg.getCard().getNumberValue() + "' and the color " + msg.getColorType());
+					+ msg.getCard().getNumberValue() + "' and the color " + msg.getCard().getColor());
+			break;
+		case STATUS_BOARD_INFORMATION:
+			Board board = msg.getBoard();
+			System.out.println("RED:" + board.getRedCards() + " YELLOW:" + board.getYellowCards() + " GREEN:"
+					+ board.getGreenCards() + " BLUE:" + board.getBlueCards() + " WHITE:" + board.getWhiteCards());
 			break;
 		case TURNACTION:
 			System.out.println("Wrong MessageType");
@@ -215,7 +220,7 @@ public class Client implements IClient {
 	}
 
 	private void giveColorHint() {
-		System.out.println("Please choose a color (red, green, blue, yellow)");
+		System.out.println("Please choose a color (red, green, blue, yellow, white)");
 		String color = getUserInput();
 		System.out.println("Please choose the player (0-4) you want to give the hint");
 		int playerNumber = Integer.parseInt(getUserInput());
