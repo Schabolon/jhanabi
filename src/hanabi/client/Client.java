@@ -134,6 +134,10 @@ public class Client implements IClient {
 		case STATUS_NOTE_STORM_COUNT:
 			System.out.println("Storm count: " + msg.getStormCount() + ", " + " note count: " + msg.getNoteCount());
 			break;
+		case STATUS_DISCARDED_CARD:
+			System.out.println("The " + msg.getPlayer().getPlayerName() + " discarded the card with the value '"
+					+ msg.getCard().getNumberValue() + "' and the color " + msg.getColorType());
+			break;
 		case TURNACTION:
 			System.out.println("Wrong MessageType");
 			break;

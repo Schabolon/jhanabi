@@ -186,6 +186,8 @@ public class GameServer implements IServer {
 		Card card = player.getCardList().get(cardPosition);
 		if (gameStats.canPlayerDiscard()) {
 			player.removeCard(card.getPosition());
+			Message discardMessage = new Message(MessageType.STATUS_DISCARDED_CARD, player, card);
+			sendAll(discardMessage);
 			player.handoutNewCard(gameStats.drawCardFromDeck());
 			gameStats.increaseNotesByOne();
 			Message msg = new Message(MessageType.NEWCARD, player, card);
