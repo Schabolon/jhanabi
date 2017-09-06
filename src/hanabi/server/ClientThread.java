@@ -5,14 +5,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import hanabi.IMessage;
 import hanabi.Player;
+import hanabi.message.IMessage;
 
 public class ClientThread extends Thread {
-	private Socket socket = null;
-	private ObjectOutputStream outputStream = null;
-	private ObjectInputStream inputStream = null;
-	private IMessage input = null;
+
+	private Socket socket;
+	private ObjectOutputStream outputStream;
+	private ObjectInputStream inputStream;
+	private IMessage input;
 	private GameServer game;
 	private Player player;
 	boolean socketIsClosed = false;

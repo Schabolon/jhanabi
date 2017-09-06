@@ -4,14 +4,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import hanabi.Message.ColorType;
+import hanabi.message.ColorType;
 
 public class GameStats {
 
 	private List<Card> carddeck = new ArrayList<>();
 	private List<Card> trayStack = new ArrayList<>();
+
 	private int stormCount = 0;
 	private int hintCount = 8;
+
 	private Board board;
 	private int turnsLeft = -1;
 
@@ -44,7 +46,15 @@ public class GameStats {
 
 	public void handOutCardsAtGamestart(List<Player> playerList) {
 		for (int i = 0; i < playerList.size(); i++) {
-			handoutCardsFromCarddeckToPlayer(5, playerList.get(i));
+			handoutCardsFromCarddeckToPlayer(getCardCoungAccordingToPlayerCount(playerList.size()), playerList.get(i));
+		}
+	}
+
+	private int getCardCoungAccordingToPlayerCount(int playerCount) {
+		if (playerCount == 2 || playerCount == 3) {
+			return 5;
+		} else {
+			return 4;
 		}
 	}
 
@@ -64,7 +74,7 @@ public class GameStats {
 		Collections.shuffle(carddeck);
 	}
 
-	public void discardCard(Card card) {
+	public void moveCardToTrayStack(Card card) {
 		trayStack.add(card);
 	}
 

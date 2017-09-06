@@ -10,12 +10,12 @@ import java.util.List;
 
 import hanabi.Board;
 import hanabi.Card;
-import hanabi.IMessage;
-import hanabi.Message;
-import hanabi.Message.ColorType;
-import hanabi.Message.MessageType;
-import hanabi.Message.PlayerActions;
 import hanabi.Player;
+import hanabi.message.ColorType;
+import hanabi.message.IMessage;
+import hanabi.message.Message;
+import hanabi.message.MessageType;
+import hanabi.message.PlayerActions;
 
 public class Client implements IClient {
 
@@ -25,7 +25,7 @@ public class Client implements IClient {
 	private Socket socket;
 	private ObjectOutputStream objectOutputStream;
 
-	private ClientServerListener clientServerListener;
+	private ClientListener clientListener;
 
 	private List<String> playerNames;
 
@@ -342,14 +342,14 @@ public class Client implements IClient {
 
 	@Override
 	public void listenToServer() {
-		clientServerListener = new ClientServerListener(this);
-		clientServerListener.start();
+		clientListener = new ClientListener(this);
+		clientListener.start();
 	}
 
 	@Override
 	public boolean disconnect() {
 		System.out.println("Disconnecting ...");
-		clientServerListener.terminate();
+		clientListener.terminate();
 		try {
 			socket.close();
 		} catch (IOException e) {

@@ -1,7 +1,11 @@
-package hanabi;
+package hanabi.message;
 
 import java.io.Serializable;
 import java.util.List;
+
+import hanabi.Board;
+import hanabi.Card;
+import hanabi.Player;
 
 public class Message implements IMessage, Serializable {
 
@@ -10,9 +14,9 @@ public class Message implements IMessage, Serializable {
 	private MessageType messageType;
 	private Player player;
 	private Card card;
-	private PlayerActions playerActions;
 	private ColorType colorType;
 	private int numberValue;
+	private PlayerActions playerActions;
 	private List<Card> cardList;
 	private boolean cardPlayedCorrectly;
 	private int score;
@@ -148,12 +152,6 @@ public class Message implements IMessage, Serializable {
 	}
 
 	@Override
-	public Turn getTurn() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public MessageType getMessageType() {
 		return messageType;
 
@@ -202,39 +200,10 @@ public class Message implements IMessage, Serializable {
 	public int getDeckCount() {
 		return deckCount;
 	}
-	
+
 	@Override
 	public List<String> getPlayerNames() {
 		return playerNames;
 	}
 
-	public enum MessageType {
-		START, QUIT, TURNSTART, TURNACTION, NEWCARD, TURNEND, STATUS_COLOR_HINT, STATUS_NUMBER_HINT, STATUS_PLAYED_CARD, STATUS_GAME_END, STATUS_PLAYER_CARDS, STATUS_HINT_STORM_COUNT, STATUS_DISCARDED_CARD, STATUS_BOARD_INFORMATION, STATUS_CARDS_LEFT_IN_DECK, STATUS_PLAYER_NAMES, TURNACTION_NOT_POSSIBLE;
-	}
-
-	public enum PlayerActions {
-		DISCARD, GIVE_COLOR_HINT, GIVE_NUMBER_HINT, PLAY_CARD;
-	}
-
-	public enum ColorType {
-		RED, YELLOW, GREEN, BLUE, WHITE, UNKNOWN;
-
-		public static ColorType getColorFromString(String color) {
-			switch (color.toLowerCase()) {
-			case "red":
-				return RED;
-			case "yellow":
-				return YELLOW;
-			case "green":
-				return GREEN;
-			case "blue":
-				return BLUE;
-			case "white":
-				return WHITE;
-			default:
-				return UNKNOWN;
-			}
-
-		}
-	}
 }

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import hanabi.Message.ColorType;
+import hanabi.message.ColorType;
 
 public class Player implements Serializable {
 
@@ -30,7 +30,7 @@ public class Player implements Serializable {
 		}
 		return cardsWithColor;
 	}
-	
+
 	public List<Card> getCardsByNumberValue(int numberValue) {
 		List<Card> cardsWithNumberValue = new ArrayList<>();
 		for (int i = 0; i < cardList.size(); i++) {
@@ -44,10 +44,6 @@ public class Player implements Serializable {
 
 	public List<Card> getCardList() {
 		return cardList;
-	}
-
-	public void setCardList(List<Card> cardList) {
-		this.cardList = cardList;
 	}
 
 	public void handoutNewCard(Card card) {

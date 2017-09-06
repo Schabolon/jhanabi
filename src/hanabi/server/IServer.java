@@ -1,7 +1,7 @@
 package hanabi.server;
 
-import hanabi.IMessage;
 import hanabi.Player;
+import hanabi.message.IMessage;
 
 public interface IServer {
 

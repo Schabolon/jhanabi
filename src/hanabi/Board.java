@@ -2,7 +2,7 @@ package hanabi;
 
 import java.io.Serializable;
 
-import hanabi.Message.ColorType;
+import hanabi.message.ColorType;
 
 public class Board implements Serializable {
 
@@ -46,6 +46,7 @@ public class Board implements Serializable {
 		return redCards + yellowCards + greenCards + blueCards + whiteCards;
 	}
 
+	//TODO besserer Name, da nicht nur geprüft wird, sondern auch Aktionen stattfinden
 	public boolean playedCardCorrectly(Card card, GameStats gameStats) {
 		ColorType cardColor = card.getColor();
 		int cardNumberValue = card.getNumberValue();

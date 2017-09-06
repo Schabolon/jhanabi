@@ -2,7 +2,7 @@ package hanabi;
 
 import java.io.Serializable;
 
-import hanabi.Message.ColorType;
+import hanabi.message.ColorType;
 
 public class Card implements Serializable {
 

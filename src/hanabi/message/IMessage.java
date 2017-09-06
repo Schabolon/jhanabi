@@ -1,25 +1,24 @@
-package hanabi;
+package hanabi.message;
 
 import java.util.List;
 
-import hanabi.Message.ColorType;
-import hanabi.Message.MessageType;
+import hanabi.Board;
+import hanabi.Card;
+import hanabi.Player;
 
 public interface IMessage {
 
-	public Player getPlayer();
-
 	public MessageType getMessageType();
+
+	public Player getPlayer();
 
 	public Card getCard();
 
-	public Turn getTurn();
-
 	public ColorType getColorType();
 
-	public List<Card> getCardList();
-
 	public int getNumberValue();
+
+	public List<Card> getCardList();
 
 	public boolean isCardPlayedCorrectly();
 
@@ -28,11 +27,11 @@ public interface IMessage {
 	public int getHintCount();
 
 	public int getStormCount();
-	
-	public Board getBoard();
-	
+
 	public int getDeckCount();
-	
+
+	public Board getBoard();
+
 	public List<String> getPlayerNames();
 
 }

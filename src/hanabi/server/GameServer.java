@@ -8,30 +8,31 @@ import java.util.Map;
 
 import hanabi.Card;
 import hanabi.GameStats;
-import hanabi.IMessage;
-import hanabi.Message;
-import hanabi.Message.ColorType;
-import hanabi.Message.MessageType;
-import hanabi.Message.PlayerActions;
 import hanabi.Player;
+import hanabi.message.ColorType;
+import hanabi.message.IMessage;
+import hanabi.message.Message;
+import hanabi.message.MessageType;
+import hanabi.message.PlayerActions;
 
 public class GameServer implements IServer {
+
 	private List<Player> players;
-	private Map<Player, ClientThread> playersByClientThread;
+	private Map<Player, ClientThread> clientThreadByPlayer;
 	private Map<Player, Boolean> playersReady;
 	private GameStats gameStats;
 	private int currentPlayerNumber = 0;
 
 	public GameServer() {
 		players = new ArrayList<>();
-		playersByClientThread = new HashMap<>();
+		clientThreadByPlayer = new HashMap<>();
 		playersReady = new HashMap<>();
 	}
 
 	@Override
 	public void addPlayer(Player player, ClientThread thread) {
 		players.add(player);
-		playersByClientThread.put(player, thread);
+		clientThreadByPlayer.put(player, thread);
 		playersReady.put(player, false);
 	}
 
@@ -56,7 +57,7 @@ public class GameServer implements IServer {
 	 * clients
 	 */
 	private void handleMessage(ClientThread source, IMessage msg) {
-		Message.MessageType messageType = msg.getMessageType();
+		MessageType messageType = msg.getMessageType();
 		switch (messageType) {
 		case START:
 			System.out.println("Server received START message from " + source.getName());
@@ -95,14 +96,14 @@ public class GameServer implements IServer {
 	 * sends a message to all clients in the game
 	 */
 	private void sendAll(Message msg) {
-		for (ClientThread receiver : playersByClientThread.values()) {
+		for (ClientThread receiver : clientThreadByPlayer.values()) {
 			sendMessage(receiver, msg);
 		}
 	}
 
 	private void sendAllExcept(Message msg, Player excluded) {
-		for (ClientThread receiver : playersByClientThread.values()) {
-			if (!playersByClientThread.get(excluded).equals(receiver)) {
+		for (ClientThread receiver : clientThreadByPlayer.values()) {
+			if (!clientThreadByPlayer.get(excluded).equals(receiver)) {
 				sendMessage(receiver, msg);
 			}
 		}
@@ -131,7 +132,7 @@ public class GameServer implements IServer {
 	 */
 	private void removePlayer(Player player) {
 		players.remove(player);
-		playersByClientThread.remove(player);
+		clientThreadByPlayer.remove(player);
 		playersReady.remove(player);
 	}
 
@@ -151,7 +152,7 @@ public class GameServer implements IServer {
 			sendCardInformation();
 			Message turnStarMessage = new Message(MessageType.TURNSTART);
 			currentPlayerNumber = 0;
-			sendMessage(playersByClientThread.get(players.get(currentPlayerNumber)), turnStarMessage);
+			sendMessage(clientThreadByPlayer.get(players.get(currentPlayerNumber)), turnStarMessage);
 		}
 	}
 
@@ -195,6 +196,7 @@ public class GameServer implements IServer {
 		Card card = player.getCardList().get(cardPosition);
 		if (gameStats.canPlayerDiscard()) {
 			player.removeCard(card.getPosition());
+			gameStats.moveCardToTrayStack(card);
 			Message discardMessage = new Message(MessageType.STATUS_DISCARDED_CARD, player, card);
 			sendAll(discardMessage);
 			player.handoutNewCard(gameStats.drawCardFromDeck());
@@ -203,7 +205,7 @@ public class GameServer implements IServer {
 			Message msg = new Message(MessageType.NEWCARD, player, card);
 			sendAllExcept(msg, player);
 		} else {
-			sendMessage(playersByClientThread.get(player), new Message(MessageType.TURNACTION_NOT_POSSIBLE));
+			sendMessage(clientThreadByPlayer.get(player), new Message(MessageType.TURNACTION_NOT_POSSIBLE));
 		}
 		sendCardInformation();
 		sendNoteAndStormTokenCount();
@@ -229,7 +231,7 @@ public class GameServer implements IServer {
 			sendNoteAndStormTokenCount();
 			nextPlayersTurn();
 		} else {
-			sendMessage(playersByClientThread.get(players.get(currentPlayerNumber)),
+			sendMessage(clientThreadByPlayer.get(players.get(currentPlayerNumber)),
 					new Message(MessageType.TURNACTION_NOT_POSSIBLE));
 		}
 	}
@@ -245,7 +247,7 @@ public class GameServer implements IServer {
 			sendNoteAndStormTokenCount();
 			nextPlayersTurn();
 		} else {
-			sendMessage(playersByClientThread.get(players.get(currentPlayerNumber)),
+			sendMessage(clientThreadByPlayer.get(players.get(currentPlayerNumber)),
 					new Message(MessageType.TURNACTION_NOT_POSSIBLE));
 		}
 	}
@@ -262,6 +264,7 @@ public class GameServer implements IServer {
 			sendAll(msg);
 		}
 		player.removeCard(cardPosition);
+		gameStats.moveCardToTrayStack(card);
 		player.handoutNewCard(gameStats.drawCardFromDeck());
 		sendCardsLeftInDeckStatus();
 		sendCardInformation();
@@ -328,14 +331,14 @@ public class GameServer implements IServer {
 	private void endCurrentPlayersTurn() {
 		Player currentPlayer = players.get(currentPlayerNumber);
 		Message msg = new Message(MessageType.TURNEND);
-		ClientThread clientThread = playersByClientThread.get(currentPlayer);
+		ClientThread clientThread = clientThreadByPlayer.get(currentPlayer);
 		sendMessage(clientThread, msg);
 	}
 
 	private void startCurrentPlayersTurn() {
 		Player currentPlayer = players.get(currentPlayerNumber);
 		Message msg = new Message(MessageType.TURNSTART);
-		ClientThread clientThread = playersByClientThread.get(currentPlayer);
+		ClientThread clientThread = clientThreadByPlayer.get(currentPlayer);
 		sendMessage(clientThread, msg);
 	}
 
@@ -356,7 +359,7 @@ public class GameServer implements IServer {
 		removePlayer(quittingPlayer);
 		source.closeSocket();
 		for (Player remainingPlayer : players) {
-			sendMessage(playersByClientThread.get(remainingPlayer), new Message(MessageType.QUIT, quittingPlayer));
+			sendMessage(clientThreadByPlayer.get(remainingPlayer), new Message(MessageType.QUIT, quittingPlayer));
 		}
 
 	}

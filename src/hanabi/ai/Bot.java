@@ -8,13 +8,13 @@ import java.util.List;
 import java.util.Random;
 
 import hanabi.Card;
-import hanabi.IMessage;
-import hanabi.Message;
-import hanabi.Message.ColorType;
-import hanabi.Message.MessageType;
-import hanabi.Message.PlayerActions;
 import hanabi.Player;
 import hanabi.client.IClient;
+import hanabi.message.ColorType;
+import hanabi.message.IMessage;
+import hanabi.message.Message;
+import hanabi.message.MessageType;
+import hanabi.message.PlayerActions;
 
 public class Bot implements IClient {
 
@@ -22,7 +22,7 @@ public class Bot implements IClient {
 	private int port;
 	private Socket socket;
 	private ObjectOutputStream objectOutputStream;
-	private BotServerListener botServerListener;
+	private BotListener botListener;
 	private List<String> playerNames;
 
 	public Bot(String hostName, int port) {
@@ -139,14 +139,14 @@ public class Bot implements IClient {
 
 	@Override
 	public void listenToServer() {
-		botServerListener = new BotServerListener(this);
-		botServerListener.start();
+		botListener = new BotListener(this);
+		botListener.start();
 	}
 
 	@Override
 	public boolean disconnect() {
 		System.out.println("Disconnecting ...");
-		botServerListener.terminate();
+		botListener.terminate();
 		try {
 			socket.close();
 		} catch (IOException e) {

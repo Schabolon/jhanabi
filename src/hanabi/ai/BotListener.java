@@ -1,29 +1,24 @@
-package hanabi.client;
+package hanabi.ai;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
-import hanabi.IMessage;
+import hanabi.message.IMessage;
 
-public class ClientServerListener extends Thread {
+public class BotListener extends Thread {
 
-	ObjectInputStream objectInputStream;
-	Client client;
-	boolean listenToServer = true;
+	private Bot bot;
+	private boolean listenToServer = true;
+	private ObjectInputStream objectInputStream;
 
-	public ClientServerListener(Client client) {
-		this.client = client;
+	public BotListener(Bot bot) {
+		this.bot = bot;
 		objectInputStream = getObjectInputStream();
-	}
-
-	public void terminate() {
-		listenToServer = false;
 	}
 
 	@Override
 	public void run() {
-		System.err.println("Started listening ...");
-		while (listenToServer && !client.getSocket().isClosed()) {
+		while (listenToServer && !bot.getSocket().isClosed()) {
 			Object object = null;
 			try {
 				object = objectInputStream.readObject();
@@ -35,23 +30,23 @@ public class ClientServerListener extends Thread {
 				e.printStackTrace();
 			}
 			IMessage msg = (IMessage) object;
-			client.readMessage(msg);
-		}
-		try {
-			objectInputStream.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+			bot.readMessage(msg);
 		}
 	}
 
 	private ObjectInputStream getObjectInputStream() {
 		ObjectInputStream objectInputStream = null;
 		try {
-			objectInputStream = new ObjectInputStream(client.getSocket().getInputStream());
+			objectInputStream = new ObjectInputStream(bot.getSocket().getInputStream());
 		} catch (IOException e) {
 			System.out.println("Couldn't get ObjectInputStream");
 			e.printStackTrace();
 		}
 		return objectInputStream;
 	}
+
+	public void terminate() {
+		listenToServer = false;
+	}
+
 }

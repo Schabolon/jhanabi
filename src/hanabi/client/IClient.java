@@ -2,7 +2,7 @@ package hanabi.client;
 
 import java.net.Socket;
 
-import hanabi.IMessage;
+import hanabi.message.IMessage;
 
 
 
