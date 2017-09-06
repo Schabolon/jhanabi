@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hanabi.gui.LoginController">
+   <children>
+      <Pane prefHeight="255.0" prefWidth="340.0">
+         <children>
+            <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to jhanabi a coop card game" />
+            <Text layoutX="14.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="In order to conncet to a server enter the following data:" />
+            <Text layoutX="14.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Server ip:" />
+            <TextField fx:id="serverIp" layoutX="96.0" layoutY="124.0" />
+            <Text layoutX="14.0" layoutY="183.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Server port:" />
+            <TextField fx:id="serverPort" layoutX="96.0" layoutY="166.0" />
+            <Button layoutX="144.0" layoutY="205.0" mnemonicParsing="false" onAction="#connectToServer" text="Connect" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hanabi.gui.OtherPlayerController">
+   <children>
+      <VBox prefHeight="183.0" prefWidth="376.0">
+         <children>
+            <HBox prefHeight="113.0" prefWidth="376.0">
+               <children>
+                  <StackPane prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="firstHandCard" fitHeight="150.0" fitWidth="208.0" onMouseClicked="#test" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../Card_empty.png" />
+                           </image>
+                        </ImageView>
+                        <Text fx:id="firstCardNumber" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                     </children>
+                  </StackPane>
+                  <StackPane prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="secondHandCard" fitHeight="150.0" fitWidth="208.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../Card_empty.png" />
+                           </image>
+                        </ImageView>
+                        <Text fx:id="secondCardNumber" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                     </children>
+                  </StackPane>
+                  <StackPane prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="thirdHandCard" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../Card_empty.png" />
+                           </image>
+                        </ImageView>
+                        <Text fx:id="thirdCardNumber" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                     </children>
+                  </StackPane>
+                  <StackPane prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="fourthHandCard" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../Card_empty.png" />
+                           </image>
+                        </ImageView>
+                        <Text fx:id="fourthCardNumber" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                     </children>
+                  </StackPane>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <Text fx:id="playerName" layoutX="172.0" layoutY="188.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player" />
+   </children>
+</Pane>
