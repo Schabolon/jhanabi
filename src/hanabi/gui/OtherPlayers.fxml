@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.*?>
@@ -8,9 +10,10 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hanabi.gui.OtherPlayerController">
+<Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="251.0" prefWidth="423.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hanabi.gui.OtherPlayerController">
    <children>
-      <VBox prefHeight="183.0" prefWidth="376.0">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="251.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="10.0" width="423.0" />
+      <VBox layoutX="24.0" layoutY="34.0" prefHeight="183.0" prefWidth="376.0">
          <children>
             <HBox prefHeight="113.0" prefWidth="376.0">
                <children>
@@ -58,6 +61,6 @@
             </HBox>
          </children>
       </VBox>
-      <Text fx:id="playerName" layoutX="172.0" layoutY="188.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player" />
+      <Text fx:id="playerName" layoutX="192.0" layoutY="223.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player" />
    </children>
 </Pane>
