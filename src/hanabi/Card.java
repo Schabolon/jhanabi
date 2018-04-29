@@ -8,10 +8,20 @@ public class Card implements Serializable {
 
 	private static final long serialVersionUID = 1385655208456463264L;
 
+	/**
+	 * The position of the Card in a players hand.
+	 */
 	int position;
 
+	/**
+	 * The color of the card. Possible colors: yellow, red, green, blue, white
+	 */
 	ColorType color;
-	int numberValue;
+	
+	/**
+	 * The number "printed" onto the card
+	 */
+	int number;
 
 	public Card(int position) {
 		this.position = position;
@@ -22,15 +32,15 @@ public class Card implements Serializable {
 		this.color = color;
 	}
 
-	public Card(int position, ColorType color, int numberValue) {
+	public Card(int position, ColorType color, int number) {
 		this.position = position;
 		this.color = color;
-		this.numberValue = numberValue;
+		this.number = number;
 	}
 
-	public Card(ColorType color, int numberValue) {
+	public Card(ColorType color, int number) {
 		this.color = color;
-		this.numberValue = numberValue;
+		this.number = number;
 	}
 
 	public int getPosition() {
@@ -46,7 +56,7 @@ public class Card implements Serializable {
 	}
 
 	public int getNumberValue() {
-		return numberValue;
+		return number;
 	}
 
 	public String toString() {
