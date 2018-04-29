@@ -89,7 +89,7 @@ public class GameController {
 						e.printStackTrace();
 					}
 					otherPlayerContainer.getChildren().add(otherPlayers);
-					otherPlayerController.setPlayerName("Player " + Integer.toString(count));
+					otherPlayerController.setPlayerName("Player " + Integer.toString(i));
 				}
 				stage.sizeToScene();
 				stage.centerOnScreen();
