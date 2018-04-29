@@ -8,97 +8,112 @@ public class Board implements Serializable {
 
 	private static final long serialVersionUID = -9007243603738108878L;
 
-	int redCards;
-	int yellowCards;
-	int greenCards;
-	int blueCards;
-	int whiteCards;
+	/**
+	 * The card-number of the top card on the red pile. If the card-number reaches
+	 * 5, the players have completed this pile.
+	 */
+	int cardNumberOnTopOfRedPile;
 
-	public Board(int redCards, int yellowCards, int greenCards, int blueCards, int whiteCards) {
-		this.redCards = redCards;
-		this.yellowCards = yellowCards;
-		this.greenCards = greenCards;
-		this.blueCards = blueCards;
-		this.whiteCards = whiteCards;
+	/**
+	 * The card-number of the top card on the yellow pile. If the card-number
+	 * reaches 5, the players have completed this pile.
+	 */
+	int cardNumberOnTopOfYellowPile;
+
+	/**
+	 * The card-number of the top card on the green pile. If the card-number reaches
+	 * 5, the players have completed this pile.
+	 */
+	int cardNumberOnTopOfGreenPile;
+
+	/**
+	 * The card-number of the top card on the blue pile. If the card-number reaches
+	 * 5, the players have completed this pile.
+	 */
+	int cardNumberOnTopOfBluePile;
+
+	/**
+	 * The card-number of the top card on the white pile. If the card-number reaches
+	 * 5, the players have completed this pile.
+	 */
+	int cardNumberOnTopOfWhitePile;
+
+	public Board(int cardNumberOnTopOfRedPile, int cardNumberOnTopOfYellowPile, int cardNumberOnTopOfGreenPile,
+			int cardNumberOnTopOfBluePile, int cardNumberOnTopOfWhitePile) {
+		this.cardNumberOnTopOfRedPile = cardNumberOnTopOfRedPile;
+		this.cardNumberOnTopOfYellowPile = cardNumberOnTopOfYellowPile;
+		this.cardNumberOnTopOfGreenPile = cardNumberOnTopOfGreenPile;
+		this.cardNumberOnTopOfBluePile = cardNumberOnTopOfBluePile;
+		this.cardNumberOnTopOfWhitePile = cardNumberOnTopOfWhitePile;
 	}
 
-	public int getRedCards() {
-		return redCards;
+	public int getCardNumberOnTopOfRedPile() {
+		return cardNumberOnTopOfRedPile;
 	}
 
-	public int getYellowCards() {
-		return yellowCards;
+	public int getCardNumberOnTopOfYellowPile() {
+		return cardNumberOnTopOfYellowPile;
 	}
 
-	public int getGreenCards() {
-		return greenCards;
+	public int getCardNumberOnTopOfGreenPile() {
+		return cardNumberOnTopOfGreenPile;
 	}
 
-	public int getBlueCards() {
-		return blueCards;
+	public int getCardNumberOnTopOfBluePile() {
+		return cardNumberOnTopOfBluePile;
 	}
 
-	public int getWhiteCards() {
-		return whiteCards;
+	public int getCardNumberOnTopOfWhitePile() {
+		return cardNumberOnTopOfWhitePile;
 	}
 
-	public int getAllCardsCount() {
-		return redCards + yellowCards + greenCards + blueCards + whiteCards;
+	public int getAllCardsCountAlreadyOnPile() {
+		return cardNumberOnTopOfRedPile + cardNumberOnTopOfYellowPile + cardNumberOnTopOfGreenPile
+				+ cardNumberOnTopOfBluePile + cardNumberOnTopOfWhitePile;
 	}
 
-	//TODO besserer Name, da nicht nur geprüft wird, sondern auch Aktionen stattfinden
-	public boolean playedCardCorrectly(Card card, GameStats gameStats) {
+	public boolean checkIfPlayedCardCorrectlyAndIncreaseHintCountIfCardPileIsComplete(Card card, GameStats gameStats) {
 		ColorType cardColor = card.getColor();
-		int cardNumberValue = card.getNumberValue();
+		int cardNumber = card.getNumberValue();
 		switch (cardColor) {
 		case BLUE:
-			if ((blueCards + 1) == cardNumberValue && blueCards != 5) {
-				blueCards = blueCards + 1;
-				if (blueCards == 5) {
-					gameStats.increaseHintsByOne();
-				}
-				return true;
-			}
-			return false;
+			playedCardCorrectlyAndIncreaseHintCountIfCardPileIsComplete(cardNumber, cardNumberOnTopOfBluePile,
+					gameStats);
 		case GREEN:
-			if ((greenCards + 1) == cardNumberValue && greenCards != 5) {
-				greenCards = greenCards + 1;
-				if (greenCards == 5) {
-					gameStats.increaseHintsByOne();
-				}
-				return true;
-			}
-			return false;
+			playedCardCorrectlyAndIncreaseHintCountIfCardPileIsComplete(cardNumber, cardNumberOnTopOfGreenPile,
+					gameStats);
 		case RED:
-			if ((redCards + 1) == cardNumberValue && redCards != 5) {
-				redCards = redCards + 1;
-				if (redCards == 5) {
-					gameStats.increaseHintsByOne();
-				}
-				return true;
-			}
-			return false;
+			playedCardCorrectlyAndIncreaseHintCountIfCardPileIsComplete(cardNumber, cardNumberOnTopOfRedPile,
+					gameStats);
 		case WHITE:
-			if ((whiteCards + 1) == cardNumberValue && whiteCards != 5) {
-				whiteCards = whiteCards + 1;
-				if (whiteCards == 5) {
-					gameStats.increaseHintsByOne();
-				}
-				return true;
-			}
-			return false;
+			playedCardCorrectlyAndIncreaseHintCountIfCardPileIsComplete(cardNumber, cardNumberOnTopOfWhitePile,
+					gameStats);
 		case YELLOW:
-			if ((yellowCards + 1) == cardNumberValue && yellowCards != 5) {
-				yellowCards = yellowCards + 1;
-				if (yellowCards == 5) {
-					gameStats.increaseHintsByOne();
-				}
-				return true;
-			}
-			return false;
+			playedCardCorrectlyAndIncreaseHintCountIfCardPileIsComplete(cardNumber, cardNumberOnTopOfYellowPile,
+					gameStats);
 		default:
 			return false;
+		}
+	}
 
+	private boolean playedCardCorrectlyAndIncreaseHintCountIfCardPileIsComplete(int cardNumber,
+			int cardNumberOnTopOfPile, GameStats gameStats) {
+		if (isCardNumberOneSizeBiggerThanCardNumberOnPile(cardNumber, cardNumberOnTopOfPile)
+				&& cardNumberOnTopOfBluePile != 5) {
+			cardNumberOnTopOfBluePile++;
+			increaseHintsCountIfCardPileIsComplete(cardNumberOnTopOfPile, gameStats);
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isCardNumberOneSizeBiggerThanCardNumberOnPile(int cardNumberValue, int cardNumberOnTopOfPile) {
+		return ((cardNumberOnTopOfPile + 1) == cardNumberValue);
+	}
+
+	private void increaseHintsCountIfCardPileIsComplete(int cardNumberOnTopOfPile, GameStats gameStats) {
+		if (cardNumberOnTopOfPile == 5) {
+			gameStats.increaseHintsByOne();
 		}
 	}
 }

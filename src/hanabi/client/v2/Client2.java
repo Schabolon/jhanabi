@@ -145,8 +145,8 @@ public class Client2 implements IClient {
 			break;
 		case STATUS_BOARD_INFORMATION:
 			Board board = msg.getBoard();
-			System.out.println("RED:" + board.getRedCards() + " YELLOW:" + board.getYellowCards() + " GREEN:"
-					+ board.getGreenCards() + " BLUE:" + board.getBlueCards() + " WHITE:" + board.getWhiteCards());
+			System.out.println("RED:" + board.getCardNumberOnTopOfRedPile() + " YELLOW:" + board.getCardNumberOnTopOfYellowPile() + " GREEN:"
+					+ board.getCardNumberOnTopOfGreenPile() + " BLUE:" + board.getCardNumberOnTopOfBluePile() + " WHITE:" + board.getCardNumberOnTopOfWhitePile());
 			System.out.println("------------------------------------------------------------");
 			break;
 		case STATUS_CARDS_LEFT_IN_DECK:

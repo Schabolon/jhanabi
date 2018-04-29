@@ -43,6 +43,8 @@ public class GameController {
 		System.out.println(client.getGameController().toString());
 
 		this.client.listenToServer();
+		
+		//TODO start-Button hinzufügen
 		this.client.sendMessage(new Message(MessageType.START));
 	}
 

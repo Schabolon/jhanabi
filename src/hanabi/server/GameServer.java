@@ -255,7 +255,7 @@ public class GameServer implements IServer {
 	private void playCardHandler(int playerNumber, int cardPosition) {
 		Player player = players.get(playerNumber);
 		Card card = player.getCardList().get(cardPosition);
-		if (gameStats.getBoard().playedCardCorrectly(card, gameStats)) {
+		if (gameStats.getBoard().checkIfPlayedCardCorrectlyAndIncreaseHintCountIfCardPileIsComplete(card, gameStats)) {
 			Message msg = new Message(MessageType.STATUS_PLAYED_CARD, player, card, true);
 			sendAll(msg);
 		} else {
@@ -305,7 +305,7 @@ public class GameServer implements IServer {
 			return true;
 		}
 
-		if (gameStats.getBoard().getAllCardsCount() == 25) {
+		if (gameStats.getBoard().getAllCardsCountAlreadyOnPile() == 25) {
 			return true;
 		}
 
@@ -316,7 +316,7 @@ public class GameServer implements IServer {
 		if (gameStats.getStormCount() >= 3) {
 			return 0;
 		} else {
-			return gameStats.getBoard().getAllCardsCount();
+			return gameStats.getBoard().getAllCardsCountAlreadyOnPile();
 		}
 	}
 
