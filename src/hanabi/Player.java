@@ -11,19 +11,19 @@ public class Player implements Serializable {
 	private static final long serialVersionUID = -5801295088864066878L;
 
 	private String playerName;
-	private List<Card> cardList;
+	private List<Card> handCards;
 	private int playerNumber;
 
 	public Player(int playerNumber) {
 		this.playerName = "Player " + Integer.toString(playerNumber);
-		cardList = new ArrayList<>();
+		handCards = new ArrayList<>();
 		this.playerNumber = playerNumber;
 	}
 
 	public List<Card> getCardsByColor(ColorType color) {
 		List<Card> cardsWithColor = new ArrayList<>();
-		for (int i = 0; i < cardList.size(); i++) {
-			Card card = cardList.get(i);
+		for (int i = 0; i < handCards.size(); i++) {
+			Card card = handCards.get(i);
 			if (card.getColor().equals(color)) {
 				cardsWithColor.add(card);
 			}
@@ -31,34 +31,34 @@ public class Player implements Serializable {
 		return cardsWithColor;
 	}
 
-	public List<Card> getCardsByNumberValue(int numberValue) {
-		List<Card> cardsWithNumberValue = new ArrayList<>();
-		for (int i = 0; i < cardList.size(); i++) {
-			Card card = cardList.get(i);
-			if (card.getNumberValue() == numberValue) {
-				cardsWithNumberValue.add(card);
+	public List<Card> getCardsByNumber(int number) {
+		List<Card> cardsWithSpecifiedNumber = new ArrayList<>();
+		for (int i = 0; i < handCards.size(); i++) {
+			Card card = handCards.get(i);
+			if (card.getNumber() == number) {
+				cardsWithSpecifiedNumber.add(card);
 			}
 		}
-		return cardsWithNumberValue;
+		return cardsWithSpecifiedNumber;
 	}
 
-	public List<Card> getCardList() {
-		return cardList;
+	public List<Card> getHandCards() {
+		return handCards;
 	}
 
 	public void handoutNewCard(Card card) {
-		card.setPosition(cardList.size());
-		cardList.add(card);
+		card.setPosition(handCards.size());
+		handCards.add(card);
 	}
 
 	public void removeCard(int position) {
-		cardList.remove(position);
+		handCards.remove(position);
 		updatePlayerCardPositions();
 	}
 
 	private void updatePlayerCardPositions() {
-		for (int i = 0; i < cardList.size(); i++) {
-			cardList.get(i).setPosition(i);
+		for (int i = 0; i < handCards.size(); i++) {
+			handCards.get(i).setPosition(i);
 		}
 	}
 

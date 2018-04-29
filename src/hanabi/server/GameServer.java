@@ -159,7 +159,7 @@ public class GameServer implements IServer {
 	private void sendCardInformation() {
 		for (int i = 0; i < players.size(); i++) {
 			Player player = players.get(i);
-			Message msg = new Message(MessageType.STATUS_PLAYER_CARDS, player, player.getCardList());
+			Message msg = new Message(MessageType.STATUS_PLAYER_CARDS, player, player.getHandCards());
 			sendAllExcept(msg, player);
 		}
 	}
@@ -193,7 +193,7 @@ public class GameServer implements IServer {
 	}
 
 	private void discardHandler(Player player, int cardPosition) {
-		Card card = player.getCardList().get(cardPosition);
+		Card card = player.getHandCards().get(cardPosition);
 		if (gameStats.canPlayerDiscard()) {
 			player.removeCard(card.getPosition());
 			gameStats.moveCardToTrayStack(card);
@@ -239,7 +239,7 @@ public class GameServer implements IServer {
 	private void numberHintHandler(int playerNumber, int numberValue) {
 		if (canPlayerGiveHint()) {
 			Player playerTheHintIsGivenTo = players.get(playerNumber);
-			List<Card> cardsWithGivenNumberValue = playerTheHintIsGivenTo.getCardsByNumberValue(numberValue);
+			List<Card> cardsWithGivenNumberValue = playerTheHintIsGivenTo.getCardsByNumber(numberValue);
 			gameStats.decreaseHintsByOne();
 			Message msg = new Message(MessageType.STATUS_NUMBER_HINT, numberValue, cardsWithGivenNumberValue,
 					playerTheHintIsGivenTo);
@@ -254,7 +254,7 @@ public class GameServer implements IServer {
 
 	private void playCardHandler(int playerNumber, int cardPosition) {
 		Player player = players.get(playerNumber);
-		Card card = player.getCardList().get(cardPosition);
+		Card card = player.getHandCards().get(cardPosition);
 		if (gameStats.getBoard().checkIfPlayedCardCorrectlyAndIncreaseHintCountIfCardPileIsComplete(card, gameStats)) {
 			Message msg = new Message(MessageType.STATUS_PLAYED_CARD, player, card, true);
 			sendAll(msg);

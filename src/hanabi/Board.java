@@ -76,7 +76,7 @@ public class Board implements Serializable {
 
 	public boolean checkIfPlayedCardCorrectlyAndIncreaseHintCountIfCardPileIsComplete(Card card, GameStats gameStats) {
 		ColorType cardColor = card.getColor();
-		int cardNumber = card.getNumberValue();
+		int cardNumber = card.getNumber();
 		switch (cardColor) {
 		case BLUE:
 			playedCardCorrectlyAndIncreaseHintCountIfCardPileIsComplete(cardNumber, cardNumberOnTopOfBluePile,

@@ -116,7 +116,7 @@ public class Client implements IClient {
 			break;
 		case STATUS_PLAYED_CARD:
 			System.out.println("The " + msg.getPlayer().getPlayerName() + " played the card with the value '"
-					+ msg.getCard().getNumberValue() + "' and the color " + msg.getCard().getColor() + " and it was "
+					+ msg.getCard().getNumber() + "' and the color " + msg.getCard().getColor() + " and it was "
 					+ msg.isCardPlayedCorrectly());
 			break;
 		case STATUS_PLAYER_CARDS:
@@ -124,7 +124,7 @@ public class Client implements IClient {
 			List<Card> playersCards = msg.getCardList();
 			for (int i = 0; i < playersCards.size(); i++) {
 				Card card = playersCards.get(i);
-				System.out.println(card.getNumberValue() + " " + card.getColor());
+				System.out.println(card.getNumber() + " " + card.getColor());
 			}
 			System.out.println(" ");
 			break;
@@ -137,7 +137,7 @@ public class Client implements IClient {
 			break;
 		case STATUS_DISCARDED_CARD:
 			System.out.println("The " + msg.getPlayer().getPlayerName() + " discarded the card with the value '"
-					+ msg.getCard().getNumberValue() + "' and the color " + msg.getCard().getColor());
+					+ msg.getCard().getNumber() + "' and the color " + msg.getCard().getColor());
 			break;
 		case STATUS_BOARD_INFORMATION:
 			Board board = msg.getBoard();

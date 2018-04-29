@@ -55,7 +55,7 @@ public class Card implements Serializable {
 		return color;
 	}
 
-	public int getNumberValue() {
+	public int getNumber() {
 		return number;
 	}
 

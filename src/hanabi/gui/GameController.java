@@ -55,19 +55,19 @@ public class GameController {
 				OtherPlayerController updateControllerForPlayerWithNewCards = otherPlayersList
 						.get(player.getPlayerNumber());
 				updateControllerForPlayerWithNewCards
-						.setFirstCardNumber(Integer.toString(cardList.get(0).getNumberValue()));
+						.setFirstCardNumber(Integer.toString(cardList.get(0).getNumber()));
 				updateControllerForPlayerWithNewCards.getFirstHandCard()
 						.setImage(new Image(ColorType.getColorToCardImage(cardList.get(0).getColor())));
 				updateControllerForPlayerWithNewCards
-						.setSecondCardNumber(Integer.toString(cardList.get(1).getNumberValue()));
+						.setSecondCardNumber(Integer.toString(cardList.get(1).getNumber()));
 				updateControllerForPlayerWithNewCards.getSecondHandCard()
 						.setImage(new Image(ColorType.getColorToCardImage(cardList.get(1).getColor())));
 				updateControllerForPlayerWithNewCards
-						.setThirdCardNumber(Integer.toString(cardList.get(2).getNumberValue()));
+						.setThirdCardNumber(Integer.toString(cardList.get(2).getNumber()));
 				updateControllerForPlayerWithNewCards.getThirdHandCard()
 						.setImage(new Image(ColorType.getColorToCardImage(cardList.get(2).getColor())));
 				updateControllerForPlayerWithNewCards
-						.setFourthCardNumber(Integer.toString(cardList.get(3).getNumberValue()));
+						.setFourthCardNumber(Integer.toString(cardList.get(3).getNumber()));
 				updateControllerForPlayerWithNewCards.getFourthHandCard()
 						.setImage(new Image(ColorType.getColorToCardImage(cardList.get(3).getColor())));
 			}
