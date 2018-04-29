@@ -37,6 +37,8 @@ public class Board implements Serializable {
 	 * 5, the players have completed this pile.
 	 */
 	int cardNumberOnTopOfWhitePile;
+	
+	public static final Board EMPTY_BOARD = new Board(0, 0, 0, 0, 0);
 
 	public Board(int cardNumberOnTopOfRedPile, int cardNumberOnTopOfYellowPile, int cardNumberOnTopOfGreenPile,
 			int cardNumberOnTopOfBluePile, int cardNumberOnTopOfWhitePile) {

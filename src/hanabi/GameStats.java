@@ -8,27 +8,38 @@ import hanabi.message.ColorType;
 
 public class GameStats {
 
-	private List<Card> carddeck = new ArrayList<>();
+	/**
+	 * Cards are drawn from the card deck.
+	 */
+	private List<Card> cardDeck = new ArrayList<>();
+
+	/**
+	 * Contains the cards all players have discarded this game.
+	 */
 	private List<Card> trayStack = new ArrayList<>();
 
 	private int stormCount = 0;
 	private int hintCount = 8;
 
 	private Board board;
+
+	/**
+	 * The turns left after the card deck is empty.
+	 */
 	private int turnsLeft = -1;
 
 	public GameStats() {
 		createCarddeck();
 		shuffle();
-		board = new Board(0, 0, 0, 0, 0);
+		board = Board.EMPTY_BOARD;
 	}
 
 	private void createCarddeck() {
-		carddeck.addAll(createTenCardsWithColor(ColorType.RED));
-		carddeck.addAll(createTenCardsWithColor(ColorType.YELLOW));
-		carddeck.addAll(createTenCardsWithColor(ColorType.GREEN));
-		carddeck.addAll(createTenCardsWithColor(ColorType.BLUE));
-		carddeck.addAll(createTenCardsWithColor(ColorType.WHITE));
+		cardDeck.addAll(createTenCardsWithColor(ColorType.RED));
+		cardDeck.addAll(createTenCardsWithColor(ColorType.YELLOW));
+		cardDeck.addAll(createTenCardsWithColor(ColorType.GREEN));
+		cardDeck.addAll(createTenCardsWithColor(ColorType.BLUE));
+		cardDeck.addAll(createTenCardsWithColor(ColorType.WHITE));
 	}
 
 	private List<Card> createTenCardsWithColor(ColorType color) {
@@ -46,11 +57,17 @@ public class GameStats {
 
 	public void handOutCardsAtGamestart(List<Player> playerList) {
 		for (int i = 0; i < playerList.size(); i++) {
-			handoutCardsFromCarddeckToPlayer(getCardCoungAccordingToPlayerCount(playerList.size()), playerList.get(i));
+			handoutCardsFromCardDeckToPlayer(getCardCountAccordingToPlayerCount(playerList.size()), playerList.get(i));
 		}
 	}
 
-	private int getCardCoungAccordingToPlayerCount(int playerCount) {
+	private void handoutCardsFromCardDeckToPlayer(int cardCount, Player player) {
+		for (int i = 0; i < cardCount; i++) {
+			player.handoutNewCard(drawCardFromDeck());
+		}
+	}
+
+	private int getCardCountAccordingToPlayerCount(int playerCount) {
 		if (playerCount == 2 || playerCount == 3) {
 			return 5;
 		} else {
@@ -58,20 +75,17 @@ public class GameStats {
 		}
 	}
 
-	private void handoutCardsFromCarddeckToPlayer(int cardCount, Player player) {
-		for (int i = 0; i < cardCount; i++) {
-			player.handoutNewCard(drawCardFromDeck());
-		}
-	}
-
 	public Card drawCardFromDeck() {
-		Card drawnCard = carddeck.get(carddeck.size() - 1);
-		carddeck.remove(carddeck.size() - 1);
+		Card drawnCard = cardDeck.get(cardDeck.size() - 1);
+		cardDeck.remove(cardDeck.size() - 1);
 		return drawnCard;
 	}
 
+	/**
+	 * Shuffles the card deck
+	 */
 	private void shuffle() {
-		Collections.shuffle(carddeck);
+		Collections.shuffle(cardDeck);
 	}
 
 	public void moveCardToTrayStack(Card card) {
@@ -79,11 +93,18 @@ public class GameStats {
 	}
 
 	public List<Card> getCarddeck() {
-		return carddeck;
+		return cardDeck;
 	}
 
 	public List<Card> getTrayStack() {
 		return trayStack;
+	}
+
+	public boolean canPlayerDiscard() {
+		if (hintCount == 8) {
+			return false;
+		}
+		return true;
 	}
 
 	public void increaseStormCountByOne() {
@@ -112,13 +133,6 @@ public class GameStats {
 
 	public Board getBoard() {
 		return board;
-	}
-
-	public boolean canPlayerDiscard() {
-		if (hintCount == 8) {
-			return false;
-		}
-		return true;
 	}
 
 	public int getTurnsLeft() {
