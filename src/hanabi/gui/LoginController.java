@@ -38,7 +38,7 @@ public class LoginController {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("Game.fxml"));
 			root = loader.load();
 			GameController gameController = loader.getController();
-			gameController.initialize(client);
+			gameController.initialize(client, stage);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

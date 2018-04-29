@@ -17,6 +17,7 @@ import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 public class GameController {
 
@@ -30,9 +31,12 @@ public class GameController {
 	List<String> playerNames;
 
 	Client2 client;
+	
+	Stage stage;
 
-	public void initialize(Client2 client) {
+	public void initialize(Client2 client, Stage stage) {
 		this.client = client;
+		this.stage = stage;
 		this.client.setGameController(this);
 		playerNames = client.getPlayerNames();
 
@@ -87,6 +91,8 @@ public class GameController {
 					otherPlayerContainer.getChildren().add(otherPlayers);
 					otherPlayerController.setPlayerName("Player " + Integer.toString(count));
 				}
+				stage.sizeToScene();
+				stage.centerOnScreen();
 			}
 		});
 	}
